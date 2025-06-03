@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistema de Ventas</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Select2 -->
+    <link href="Estilos/select2.min.css" rel="stylesheet" />
+    <link href="Estilos/select2-bootstrap4.min.css" rel="stylesheet" />
+    <!-- DataTables -->
+    <link href="Estilos/dataTables.min.css" rel="stylesheet" />
+    <!-- AdminLTE -->
+    <link href="Estilos/adminlte.min.css" rel="stylesheet" />
+    <link href="Estilos/css/all.min.css" rel="stylesheet" />
+    <!-- Datepicker -->
+    <link href="Estilos/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <!-- Estilos personalizados -->
+    <style>
+        .venta-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+        }
+        
+        .empleado-info {
+            background-color: #e9f7ef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .venta-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        .venta-section h4 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .venta-totales {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .total-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #dee2e6;
+        }
+        
+        .total-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .btn-accion {
+            margin: 5px;
+            min-width: 120px;
+            font-weight: 500;
+        }
+        
+        .producto-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #fdfdfd;
+        }
+        
+        .form-control, .select2-container--default .select2-selection--single {
+            border-radius: 4px !important;
+        }
+        
+        .input-group-text {
+            background-color: #e9ecef;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .text-green {
+            color: #28a745;
+        }
+        
+        .text-blue {
+            color: #007bff;
+        }
+        
+        .text-muted {
+            color: #6c757d !important;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12" id="dvMenu">
+                    <!-- Menú de navegación -->
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header venta-header">
+                            <h3 class="card-title"><i class="fas fa-cash-register mr-2"></i>Registro de Venta</h3>
+                        </div>
+                        <form id="frmDatosVenta">
+                            <div class="card-body">
+                             
+                                <div class="empleado-info">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong><i class="fas fa-user mr-2 text-green"></i>Empleado:</strong>
+                                            <span id="lblNombreEmpleado" class="text-blue">Cargando...</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong><i class="fas fa-id-card mr-2 text-green"></i>Código:</strong>
+                                            <span id="lblCodigoEmpleado" class="text-blue">Cargando...</span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong><i class="fas fa-calendar-alt mr-2 text-green"></i>Fecha:</strong>
+                                            <span id="lblFechaActual" class="text-blue">Cargando...</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sección Datos de la Venta -->
+                                <div class="venta-section">
+                                    <h4><i class="fas fa-file-invoice-dollar mr-2"></i>Datos de la Venta</h4>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label for="txtIdVenta"><i class="fas fa-hashtag mr-1"></i>ID Venta:</label>
+                                                <input type="text" class="form-control" id="txtIdVenta" value="Generado..." disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="dtmFechaVenta"><i class="far fa-calendar-alt mr-1"></i>Fecha de Venta</label>
+                                                <div class="input-group date" id="dtmFechaVenta" data-target-input="nearest">
+                                                    <input type="text" class="form-control datetimepicker-input" data-target="#dtmFechaVenta" />
+                                                    <div class="input-group-append" data-target="#dtmFechaVenta" data-toggle="datetimepicker">
+                                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="cboTipoDoc"><i class="far fa-id-card mr-1"></i>Tipo Documento</label>
+                                                <select id="cboTipoDoc" class="form-control select2">
+                                                    <option value="">Seleccione</option>
+                                                    <!-- Opciones se cargarán dinámicamente -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="txtNroDoc"><i class="fas fa-id-card mr-1"></i>Nro. Documento</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="txtNroDoc" placeholder="Ingrese documento">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" type="button" id="btnBuscarCliente">
+                                                            <i class="fas fa-search"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="txtNombreCliente"><i class="fas fa-user mr-1"></i>Nombre Cliente</label>
+                                                <input type="text" class="form-control" id="txtNombreCliente" placeholder="Nombre del cliente" data-id="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="cboFormaPago"><i class="far fa-credit-card mr-1"></i>Forma de Pago</label>
+                                                <select id="cboFormaPago" class="form-control select2">
+                                                    <option value="">Seleccione forma de pago</option>
+                                                    <!-- Opciones se cargarán dinámicamente -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sección Detalle de Venta -->
+                                <div class="venta-section">
+                                    <h4><i class="fas fa-shopping-cart mr-2"></i>Detalle de Venta</h4>
+
+                                    <!-- Producto 1 -->
+                                    <div class="producto-item">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label><i class="fas fa-box-open mr-1"></i>Producto</label>
+                                                    <select id="cboProducto1" class="form-control select2">
+                                                        <option value="">Seleccione un producto</option>
+                                                        <!-- Opciones se cargarán dinámicamente -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label><i class="fas fa-sort-numeric-up mr-1"></i>Cantidad</label>
+                                                    <input type="number" class="form-control" id="txtCantidad1" value="1" min="1">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label><i class="fas fa-tag mr-1"></i>Precio Unitario</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">$</span>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="txtPrecioUnitario1" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label><i class="fas fa-percentage mr-1"></i>Descuento</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">$</span>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="txtDescuento1" value="0.00">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label><i class="fas fa-calculator mr-1"></i>Subtotal</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">$</span>
+                                                        </div>
+                                                        <input type="text" class="form-control text-right" id="txtSubtotal1" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botón para agregar más productos -->
+                                    <div class="text-center mt-2">
+                                        <button type="button" id="btnAgregarProducto" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-plus-circle mr-1"></i> Agregar otro producto
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Sección Totales -->
+                                <div class="venta-totales">
+                                    <div class="total-item">
+                                        <span><i class="fas fa-receipt mr-2"></i><strong>Subtotal:</strong></span>
+                                        <span id="lblSubtotal">$0.00</span>
+                                    </div>
+                                    <div class="total-item">
+                                        <span><i class="fas fa-tags mr-2"></i><strong>Descuento:</strong></span>
+                                        <span id="lblDescuento">$0.00</span>
+                                    </div>
+                                    <div class="total-item">
+                                        <span><i class="fas fa-percent mr-2"></i><strong>Impuestos:</strong></span>
+                                        <span id="lblImpuestos">$0.00</span>
+                                    </div>
+                                    <div class="total-item">
+                                        <span><i class="fas fa-money-bill-wave mr-2"></i><strong>Total a Pagar:</strong></span>
+                                        <span id="lblTotal" class="text-success" style="font-size: 1.2em;">$0.00</span>
+                                    </div>
+
+                                    <div class="form-check mt-4">
+                                        <input type="checkbox" class="form-check-input" id="chkDomicilio">
+                                        <label class="form-check-label" for="chkDomicilio">
+                                            <i class="fas fa-truck mr-1"></i>¿Requiere Servicio a Domicilio?
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group mt-3">
+                                        <label for="txtComentarios"><i class="far fa-comment-dots mr-1"></i>Comentarios</label>
+                                        <textarea class="form-control" id="txtComentarios" rows="2" placeholder="Observaciones adicionales..."></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Botones de Acción -->
+                                <div class="text-center mt-4">
+                                    <button type="button" id="btnGuardar" class="btn btn-success btn-accion">
+                                        <i class="fas fa-save mr-1"></i> Guardar Venta
+                                    </button>
+                                    <button type="button" id="btnModificar" class="btn btn-primary btn-accion">
+                                        <i class="fas fa-edit mr-1"></i> Modificar Venta
+                                    </button>
+                                    <button type="button" id="btnBuscar" class="btn btn-info btn-accion">
+                                        <i class="fas fa-search mr-1"></i> Buscar Venta
+                                    </button>
+                                    <button type="button" id="btnCancelar" class="btn btn-warning btn-accion">
+                                        <i class="fas fa-times mr-1"></i> Cancelar
+                                    </button>
+                                    <button type="button" id="btnImprimir" class="btn btn-secondary btn-accion">
+                                        <i class="fas fa-print mr-1"></i> Imprimir Factura
+                                    </button>
+                                </div>
+
+                                <!-- Zona de Mensajes -->
+                                <div id="dvMensaje" class="mt-4"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="../Scripts/jquery-3.7.0.js"></script>
+    <script src="../Scripts/moment.min.js"></script>
+    <script src="../Scripts/bootstrap.bundle.min.js"></script>
+    <!-- Select2 -->
+    <script src="../Scripts/select2.min.js"></script>
+    <script src="Scripts/Comunes/Combos.js"></script>
+    <!-- DataTables -->
+    <script src="../Scripts/jquery.dataTables.min.js"></script>
+    <script src="../Scripts/dataTables.bootstrap4.min.js"></script>
+    <script src="Scripts/Comunes/Tablas.js"></script>
+    <!-- Datepicker -->
+    <script src="../Scripts/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- jsPDF -->
+    <script src="Scripts/Comunes/jspdf.min.js"></script>
+    <!-- Script principal del formulario -->
+    <script src="../Scripts/daterangepicker.js"></script>
+    <script src="../Scripts/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="Scripts/frmInicio.js"></script>
+    <script src="Scripts/frmVenta.js"></script>
+
+</body>
+</html>

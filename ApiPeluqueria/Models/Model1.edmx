@@ -1,0 +1,1498 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="bd_tienda_belleza_finalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cargoempleado">
+          <Key>
+            <PropertyRef Name="id_cargo" />
+          </Key>
+          <Property Name="id_cargo" Type="int" Nullable="false" />
+          <Property Name="nombrecargo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="100" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="categoriaproducto">
+          <Key>
+            <PropertyRef Name="id_categoria" />
+          </Key>
+          <Property Name="id_categoria" Type="int" Nullable="false" />
+          <Property Name="nombrecategoria" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="ciudad">
+          <Key>
+            <PropertyRef Name="id_ciudad" />
+          </Key>
+          <Property Name="id_ciudad" Type="int" Nullable="false" />
+          <Property Name="nombreciudad" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id_cliente" />
+          </Key>
+          <Property Name="id_cliente" Type="int" Nullable="false" />
+          <Property Name="id_tipodocumento" Type="int" Nullable="false" />
+          <Property Name="numerodocumento" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="apellido" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="100" />
+          <Property Name="fecharegistro" Type="date" Nullable="false" />
+          <Property Name="activo" Type="bit" />
+          <Property Name="id_empleado" Type="int" />
+          <Property Name="id_tipocliente" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="descuentomayorista">
+          <Key>
+            <PropertyRef Name="id_descuento" />
+          </Key>
+          <Property Name="id_descuento" Type="int" Nullable="false" />
+          <Property Name="cantidadminima" Type="int" Nullable="false" />
+          <Property Name="porcentajedescuento" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="detalleventa">
+          <Key>
+            <PropertyRef Name="id_detalleventa" />
+          </Key>
+          <Property Name="id_detalleventa" Type="int" Nullable="false" />
+          <Property Name="id_venta" Type="int" Nullable="false" />
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="preciounitario" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="descuentounitario" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="subtotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_descuento" Type="int" />
+        </EntityType>
+        <EntityType Name="direccion">
+          <Key>
+            <PropertyRef Name="id_direccion" />
+          </Key>
+          <Property Name="id_direccion" Type="int" Nullable="false" />
+          <Property Name="id_ciudad" Type="int" Nullable="false" />
+          <Property Name="direccion" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="barrio" Type="varchar" MaxLength="100" />
+          <Property Name="referencia" Type="varchar" MaxLength="255" />
+          <Property Name="id_cliente" Type="int" Nullable="false" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="empleado">
+          <Key>
+            <PropertyRef Name="id_empleado" />
+          </Key>
+          <Property Name="id_empleado" Type="int" Nullable="false" />
+          <Property Name="id_tipodocumento" Type="int" Nullable="false" />
+          <Property Name="numerodocumento" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="apellido" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="fechanacimiento" Type="date" />
+          <Property Name="fechacontratacion" Type="date" Nullable="false" />
+          <Property Name="id_cargo" Type="int" Nullable="false" />
+          <Property Name="activo" Type="bit" />
+          <Property Name="salario" Type="int" />
+          <Property Name="registrado_por" Type="int" />
+        </EntityType>
+        <EntityType Name="formapago">
+          <Key>
+            <PropertyRef Name="id_formapago" />
+          </Key>
+          <Property Name="id_formapago" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id_producto" />
+          </Key>
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="codigo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="id_categoria" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="255" />
+          <Property Name="preciobase" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="costo" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="stock" Type="int" />
+          <Property Name="stockminimo" Type="int" />
+          <Property Name="activo" Type="bit" />
+          <Property Name="id_empleado" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="productopromocion">
+          <Key>
+            <PropertyRef Name="id_productopromocion" />
+          </Key>
+          <Property Name="id_productopromocion" Type="int" Nullable="false" />
+          <Property Name="id_productoprom" Type="int" Nullable="false" />
+          <Property Name="id_producto" Type="int" Nullable="false" />
+          <Property Name="cantidadproducto" Type="int" />
+        </EntityType>
+        <EntityType Name="serviciodomicilio">
+          <Key>
+            <PropertyRef Name="id_servicio" />
+          </Key>
+          <Property Name="id_servicio" Type="int" Nullable="false" />
+          <Property Name="id_venta" Type="int" Nullable="false" />
+          <Property Name="id_cliente" Type="int" Nullable="false" />
+          <Property Name="id_direccionentrega" Type="int" Nullable="false" />
+          <Property Name="id_empleado" Type="int" Nullable="false" />
+          <Property Name="fechasolicitud" Type="date" Nullable="false" />
+          <Property Name="fechaentrega" Type="datetime" />
+          <Property Name="activo" Type="bit" />
+          <Property Name="comentarios" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="telefono">
+          <Key>
+            <PropertyRef Name="id_telefono" />
+          </Key>
+          <Property Name="id_telefono" Type="int" Nullable="false" />
+          <Property Name="id_tipotelefono" Type="int" Nullable="false" />
+          <Property Name="numerotelefono" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="id_cliente" Type="int" Nullable="false" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="tipocliente">
+          <Key>
+            <PropertyRef Name="id_tipocliente" />
+          </Key>
+          <Property Name="id_tipocliente" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tipodocumento">
+          <Key>
+            <PropertyRef Name="id_tipodocumento" />
+          </Key>
+          <Property Name="id_tipodocumento" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="abreviatura" Type="varchar" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="tipotelefono">
+          <Key>
+            <PropertyRef Name="id_tipotelefono" />
+          </Key>
+          <Property Name="id_tipotelefono" Type="int" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="id_empleado" />
+          </Key>
+          <Property Name="id_empleado" Type="int" Nullable="false" />
+          <Property Name="usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="contrasena" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="activo" Type="bit" />
+        </EntityType>
+        <EntityType Name="venta">
+          <Key>
+            <PropertyRef Name="id_venta" />
+          </Key>
+          <Property Name="id_venta" Type="int" Nullable="false" />
+          <Property Name="id_cliente" Type="int" Nullable="false" />
+          <Property Name="id_empleado" Type="int" Nullable="false" />
+          <Property Name="id_formapago" Type="int" Nullable="false" />
+          <Property Name="id_detalleventa" Type="int" Nullable="false" />
+          <Property Name="fechaventa" Type="date" Nullable="false" />
+          <Property Name="subtotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="descuento" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="impuestos" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="total" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="comentarios" Type="varchar" MaxLength="255" />
+          <Property Name="domicilio" Type="bit" />
+        </EntityType>
+        <Association Name="FK__cliente__id_empl__68487DD7">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="0..1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cliente__id_tipo__6754599E">
+          <End Role="tipodocumento" Type="Self.tipodocumento" Multiplicity="1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipodocumento">
+              <PropertyRef Name="id_tipodocumento" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="id_tipodocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cliente__id_tipo__693CA210">
+          <End Role="tipocliente" Type="Self.tipocliente" Multiplicity="1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipocliente">
+              <PropertyRef Name="id_tipocliente" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="id_tipocliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleve__id_de__0B91BA14">
+          <End Role="descuentomayorista" Type="Self.descuentomayorista" Multiplicity="0..1" />
+          <End Role="detalleventa" Type="Self.detalleventa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="descuentomayorista">
+              <PropertyRef Name="id_descuento" />
+            </Principal>
+            <Dependent Role="detalleventa">
+              <PropertyRef Name="id_descuento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleve__id_pr__0A9D95DB">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="detalleventa" Type="Self.detalleventa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="detalleventa">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleve__id_ve__09A971A2">
+          <End Role="venta" Type="Self.venta" Multiplicity="1" />
+          <End Role="detalleventa" Type="Self.detalleventa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="venta">
+              <PropertyRef Name="id_venta" />
+            </Principal>
+            <Dependent Role="detalleventa">
+              <PropertyRef Name="id_venta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__direccion__id_ci__7D439ABD">
+          <End Role="ciudad" Type="Self.ciudad" Multiplicity="1" />
+          <End Role="direccion" Type="Self.direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciudad">
+              <PropertyRef Name="id_ciudad" />
+            </Principal>
+            <Dependent Role="direccion">
+              <PropertyRef Name="id_ciudad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__direccion__id_cl__7E37BEF6">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="direccion" Type="Self.direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="direccion">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__empleado__id_car__5BE2A6F2">
+          <End Role="cargoempleado" Type="Self.cargoempleado" Multiplicity="1" />
+          <End Role="empleado" Type="Self.empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cargoempleado">
+              <PropertyRef Name="id_cargo" />
+            </Principal>
+            <Dependent Role="empleado">
+              <PropertyRef Name="id_cargo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__empleado__id_tip__5AEE82B9">
+          <End Role="tipodocumento" Type="Self.tipodocumento" Multiplicity="1" />
+          <End Role="empleado" Type="Self.empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipodocumento">
+              <PropertyRef Name="id_tipodocumento" />
+            </Principal>
+            <Dependent Role="empleado">
+              <PropertyRef Name="id_tipodocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__empleado__regist__5CD6CB2B">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="0..1" />
+          <End Role="empleado1" Type="Self.empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="empleado1">
+              <PropertyRef Name="registrado_por" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__producto__id_cat__6FE99F9F">
+          <End Role="categoriaproducto" Type="Self.categoriaproducto" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoriaproducto">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__producto__id_emp__70DDC3D8">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__productop__id_pr__74AE54BC">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="productopromocion" Type="Self.productopromocion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="productopromocion">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__serviciod__id_cl__10566F31">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="serviciodomicilio" Type="Self.serviciodomicilio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="serviciodomicilio">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__serviciod__id_di__114A936A">
+          <End Role="direccion" Type="Self.direccion" Multiplicity="1" />
+          <End Role="serviciodomicilio" Type="Self.serviciodomicilio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="direccion">
+              <PropertyRef Name="id_direccion" />
+            </Principal>
+            <Dependent Role="serviciodomicilio">
+              <PropertyRef Name="id_direccionentrega" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__serviciod__id_em__123EB7A3">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="serviciodomicilio" Type="Self.serviciodomicilio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="serviciodomicilio">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__serviciod__id_ve__0F624AF8">
+          <End Role="venta" Type="Self.venta" Multiplicity="1" />
+          <End Role="serviciodomicilio" Type="Self.serviciodomicilio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="venta">
+              <PropertyRef Name="id_venta" />
+            </Principal>
+            <Dependent Role="serviciodomicilio">
+              <PropertyRef Name="id_venta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__telefono__id_cli__797309D9">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="telefono" Type="Self.telefono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="telefono">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__telefono__id_tip__787EE5A0">
+          <End Role="tipotelefono" Type="Self.tipotelefono" Multiplicity="1" />
+          <End Role="telefono" Type="Self.telefono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipotelefono">
+              <PropertyRef Name="id_tipotelefono" />
+            </Principal>
+            <Dependent Role="telefono">
+              <PropertyRef Name="id_tipotelefono" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__usuario__id_empl__619B8048">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="usuario">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__venta__id_client__03F0984C">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__venta__id_emplea__04E4BC85">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__venta__id_formap__05D8E0BE">
+          <End Role="formapago" Type="Self.formapago" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="formapago">
+              <PropertyRef Name="id_formapago" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="id_formapago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bd_tienda_belleza_finalModelStoreContainer">
+          <EntitySet Name="cargoempleado" EntityType="Self.cargoempleado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="categoriaproducto" EntityType="Self.categoriaproducto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ciudad" EntityType="Self.ciudad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cliente" EntityType="Self.cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="descuentomayorista" EntityType="Self.descuentomayorista" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="detalleventa" EntityType="Self.detalleventa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="direccion" EntityType="Self.direccion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="empleado" EntityType="Self.empleado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="formapago" EntityType="Self.formapago" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="productopromocion" EntityType="Self.productopromocion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="serviciodomicilio" EntityType="Self.serviciodomicilio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="telefono" EntityType="Self.telefono" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tipocliente" EntityType="Self.tipocliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tipodocumento" EntityType="Self.tipodocumento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tipotelefono" EntityType="Self.tipotelefono" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="venta" EntityType="Self.venta" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__cliente__id_empl__68487DD7" Association="Self.FK__cliente__id_empl__68487DD7">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cliente__id_tipo__6754599E" Association="Self.FK__cliente__id_tipo__6754599E">
+            <End Role="tipodocumento" EntitySet="tipodocumento" />
+            <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cliente__id_tipo__693CA210" Association="Self.FK__cliente__id_tipo__693CA210">
+            <End Role="tipocliente" EntitySet="tipocliente" />
+            <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleve__id_de__0B91BA14" Association="Self.FK__detalleve__id_de__0B91BA14">
+            <End Role="descuentomayorista" EntitySet="descuentomayorista" />
+            <End Role="detalleventa" EntitySet="detalleventa" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleve__id_pr__0A9D95DB" Association="Self.FK__detalleve__id_pr__0A9D95DB">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="detalleventa" EntitySet="detalleventa" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleve__id_ve__09A971A2" Association="Self.FK__detalleve__id_ve__09A971A2">
+            <End Role="venta" EntitySet="venta" />
+            <End Role="detalleventa" EntitySet="detalleventa" />
+          </AssociationSet>
+          <AssociationSet Name="FK__direccion__id_ci__7D439ABD" Association="Self.FK__direccion__id_ci__7D439ABD">
+            <End Role="ciudad" EntitySet="ciudad" />
+            <End Role="direccion" EntitySet="direccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__direccion__id_cl__7E37BEF6" Association="Self.FK__direccion__id_cl__7E37BEF6">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="direccion" EntitySet="direccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__empleado__id_car__5BE2A6F2" Association="Self.FK__empleado__id_car__5BE2A6F2">
+            <End Role="cargoempleado" EntitySet="cargoempleado" />
+            <End Role="empleado" EntitySet="empleado" />
+          </AssociationSet>
+          <AssociationSet Name="FK__empleado__id_tip__5AEE82B9" Association="Self.FK__empleado__id_tip__5AEE82B9">
+            <End Role="tipodocumento" EntitySet="tipodocumento" />
+            <End Role="empleado" EntitySet="empleado" />
+          </AssociationSet>
+          <AssociationSet Name="FK__empleado__regist__5CD6CB2B" Association="Self.FK__empleado__regist__5CD6CB2B">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="empleado1" EntitySet="empleado" />
+          </AssociationSet>
+          <AssociationSet Name="FK__producto__id_cat__6FE99F9F" Association="Self.FK__producto__id_cat__6FE99F9F">
+            <End Role="categoriaproducto" EntitySet="categoriaproducto" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK__producto__id_emp__70DDC3D8" Association="Self.FK__producto__id_emp__70DDC3D8">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK__productop__id_pr__74AE54BC" Association="Self.FK__productop__id_pr__74AE54BC">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="productopromocion" EntitySet="productopromocion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__serviciod__id_cl__10566F31" Association="Self.FK__serviciod__id_cl__10566F31">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="serviciodomicilio" EntitySet="serviciodomicilio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__serviciod__id_di__114A936A" Association="Self.FK__serviciod__id_di__114A936A">
+            <End Role="direccion" EntitySet="direccion" />
+            <End Role="serviciodomicilio" EntitySet="serviciodomicilio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__serviciod__id_em__123EB7A3" Association="Self.FK__serviciod__id_em__123EB7A3">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="serviciodomicilio" EntitySet="serviciodomicilio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__serviciod__id_ve__0F624AF8" Association="Self.FK__serviciod__id_ve__0F624AF8">
+            <End Role="venta" EntitySet="venta" />
+            <End Role="serviciodomicilio" EntitySet="serviciodomicilio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__telefono__id_cli__797309D9" Association="Self.FK__telefono__id_cli__797309D9">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="telefono" EntitySet="telefono" />
+          </AssociationSet>
+          <AssociationSet Name="FK__telefono__id_tip__787EE5A0" Association="Self.FK__telefono__id_tip__787EE5A0">
+            <End Role="tipotelefono" EntitySet="tipotelefono" />
+            <End Role="telefono" EntitySet="telefono" />
+          </AssociationSet>
+          <AssociationSet Name="FK__usuario__id_empl__619B8048" Association="Self.FK__usuario__id_empl__619B8048">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="usuario" EntitySet="usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK__venta__id_client__03F0984C" Association="Self.FK__venta__id_client__03F0984C">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="venta" EntitySet="venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__venta__id_emplea__04E4BC85" Association="Self.FK__venta__id_emplea__04E4BC85">
+            <End Role="empleado" EntitySet="empleado" />
+            <End Role="venta" EntitySet="venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__venta__id_formap__05D8E0BE" Association="Self.FK__venta__id_formap__05D8E0BE">
+            <End Role="formapago" EntitySet="formapago" />
+            <End Role="venta" EntitySet="venta" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bd_tienda_belleza_finalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="cargoempleado">
+          <Key>
+            <PropertyRef Name="id_cargo" />
+          </Key>
+          <Property Name="id_cargo" Type="Int32" Nullable="false" />
+          <Property Name="nombrecargo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="empleadoes" Relationship="Self.FK__empleado__id_car__5BE2A6F2" FromRole="cargoempleado" ToRole="empleado" />
+        </EntityType>
+        <EntityType Name="categoriaproducto">
+          <Key>
+            <PropertyRef Name="id_categoria" />
+          </Key>
+          <Property Name="id_categoria" Type="Int32" Nullable="false" />
+          <Property Name="nombrecategoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="productoes" Relationship="Self.FK__producto__id_cat__6FE99F9F" FromRole="categoriaproducto" ToRole="producto" />
+        </EntityType>
+        <EntityType Name="ciudad">
+          <Key>
+            <PropertyRef Name="id_ciudad" />
+          </Key>
+          <Property Name="id_ciudad" Type="Int32" Nullable="false" />
+          <Property Name="nombreciudad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="direccions" Relationship="Self.FK__direccion__id_ci__7D439ABD" FromRole="ciudad" ToRole="direccion" />
+        </EntityType>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id_cliente" />
+          </Key>
+          <Property Name="id_cliente" Type="Int32" Nullable="false" />
+          <Property Name="id_tipodocumento" Type="Int32" Nullable="false" />
+          <Property Name="numerodocumento" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="fecharegistro" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="activo" Type="Boolean" />
+          <Property Name="id_empleado" Type="Int32" />
+          <Property Name="id_tipocliente" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="empleado" Relationship="Self.FK__cliente__id_empl__68487DD7" FromRole="cliente" ToRole="empleado" />
+          <NavigationProperty Name="tipodocumento" Relationship="Self.FK__cliente__id_tipo__6754599E" FromRole="cliente" ToRole="tipodocumento" />
+          <NavigationProperty Name="tipocliente" Relationship="Self.FK__cliente__id_tipo__693CA210" FromRole="cliente" ToRole="tipocliente" />
+          <NavigationProperty Name="direccions" Relationship="Self.FK__direccion__id_cl__7E37BEF6" FromRole="cliente" ToRole="direccion" />
+          <NavigationProperty Name="serviciodomicilios" Relationship="Self.FK__serviciod__id_cl__10566F31" FromRole="cliente" ToRole="serviciodomicilio" />
+          <NavigationProperty Name="telefonoes" Relationship="Self.FK__telefono__id_cli__797309D9" FromRole="cliente" ToRole="telefono" />
+          <NavigationProperty Name="ventas" Relationship="Self.FK__venta__id_client__03F0984C" FromRole="cliente" ToRole="venta" />
+        </EntityType>
+        <EntityType Name="descuentomayorista">
+          <Key>
+            <PropertyRef Name="id_descuento" />
+          </Key>
+          <Property Name="id_descuento" Type="Int32" Nullable="false" />
+          <Property Name="cantidadminima" Type="Int32" Nullable="false" />
+          <Property Name="porcentajedescuento" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="detalleventas" Relationship="Self.FK__detalleve__id_de__0B91BA14" FromRole="descuentomayorista" ToRole="detalleventa" />
+        </EntityType>
+        <EntityType Name="detalleventa">
+          <Key>
+            <PropertyRef Name="id_detalleventa" />
+          </Key>
+          <Property Name="id_detalleventa" Type="Int32" Nullable="false" />
+          <Property Name="id_venta" Type="Int32" Nullable="false" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="preciounitario" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="descuentounitario" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="subtotal" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_descuento" Type="Int32" />
+          <NavigationProperty Name="descuentomayorista" Relationship="Self.FK__detalleve__id_de__0B91BA14" FromRole="detalleventa" ToRole="descuentomayorista" />
+          <NavigationProperty Name="producto" Relationship="Self.FK__detalleve__id_pr__0A9D95DB" FromRole="detalleventa" ToRole="producto" />
+          <NavigationProperty Name="venta" Relationship="Self.FK__detalleve__id_ve__09A971A2" FromRole="detalleventa" ToRole="venta" />
+        </EntityType>
+        <EntityType Name="direccion">
+          <Key>
+            <PropertyRef Name="id_direccion" />
+          </Key>
+          <Property Name="id_direccion" Type="Int32" Nullable="false" />
+          <Property Name="id_ciudad" Type="Int32" Nullable="false" />
+          <Property Name="direccion1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="barrio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="referencia" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="id_cliente" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="ciudad" Relationship="Self.FK__direccion__id_ci__7D439ABD" FromRole="direccion" ToRole="ciudad" />
+          <NavigationProperty Name="cliente" Relationship="Self.FK__direccion__id_cl__7E37BEF6" FromRole="direccion" ToRole="cliente" />
+          <NavigationProperty Name="serviciodomicilios" Relationship="Self.FK__serviciod__id_di__114A936A" FromRole="direccion" ToRole="serviciodomicilio" />
+        </EntityType>
+        <EntityType Name="empleado">
+          <Key>
+            <PropertyRef Name="id_empleado" />
+          </Key>
+          <Property Name="id_empleado" Type="Int32" Nullable="false" />
+          <Property Name="id_tipodocumento" Type="Int32" Nullable="false" />
+          <Property Name="numerodocumento" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fechanacimiento" Type="DateTime" Precision="0" />
+          <Property Name="fechacontratacion" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="id_cargo" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" />
+          <Property Name="salario" Type="Int32" />
+          <Property Name="registrado_por" Type="Int32" />
+          <NavigationProperty Name="cargoempleado" Relationship="Self.FK__empleado__id_car__5BE2A6F2" FromRole="empleado" ToRole="cargoempleado" />
+          <NavigationProperty Name="clientes" Relationship="Self.FK__cliente__id_empl__68487DD7" FromRole="empleado" ToRole="cliente" />
+          <NavigationProperty Name="tipodocumento" Relationship="Self.FK__empleado__id_tip__5AEE82B9" FromRole="empleado" ToRole="tipodocumento" />
+          <NavigationProperty Name="empleado1" Relationship="Self.FK__empleado__regist__5CD6CB2B" FromRole="empleado" ToRole="empleado1" />
+          <NavigationProperty Name="empleado2" Relationship="Self.FK__empleado__regist__5CD6CB2B" FromRole="empleado1" ToRole="empleado" />
+          <NavigationProperty Name="productoes" Relationship="Self.FK__producto__id_emp__70DDC3D8" FromRole="empleado" ToRole="producto" />
+          <NavigationProperty Name="serviciodomicilios" Relationship="Self.FK__serviciod__id_em__123EB7A3" FromRole="empleado" ToRole="serviciodomicilio" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK__usuario__id_empl__619B8048" FromRole="empleado" ToRole="usuario" />
+          <NavigationProperty Name="ventas" Relationship="Self.FK__venta__id_emplea__04E4BC85" FromRole="empleado" ToRole="venta" />
+        </EntityType>
+        <EntityType Name="formapago">
+          <Key>
+            <PropertyRef Name="id_formapago" />
+          </Key>
+          <Property Name="id_formapago" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ventas" Relationship="Self.FK__venta__id_formap__05D8E0BE" FromRole="formapago" ToRole="venta" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id_producto" />
+          </Key>
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="codigo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_categoria" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="preciobase" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="costo" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="stock" Type="Int32" />
+          <Property Name="stockminimo" Type="Int32" />
+          <Property Name="activo" Type="Boolean" />
+          <Property Name="id_empleado" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="categoriaproducto" Relationship="Self.FK__producto__id_cat__6FE99F9F" FromRole="producto" ToRole="categoriaproducto" />
+          <NavigationProperty Name="detalleventas" Relationship="Self.FK__detalleve__id_pr__0A9D95DB" FromRole="producto" ToRole="detalleventa" />
+          <NavigationProperty Name="empleado" Relationship="Self.FK__producto__id_emp__70DDC3D8" FromRole="producto" ToRole="empleado" />
+          <NavigationProperty Name="productopromocions" Relationship="Self.FK__productop__id_pr__74AE54BC" FromRole="producto" ToRole="productopromocion" />
+        </EntityType>
+        <EntityType Name="productopromocion">
+          <Key>
+            <PropertyRef Name="id_productopromocion" />
+          </Key>
+          <Property Name="id_productopromocion" Type="Int32" Nullable="false" />
+          <Property Name="id_productoprom" Type="Int32" Nullable="false" />
+          <Property Name="id_producto" Type="Int32" Nullable="false" />
+          <Property Name="cantidadproducto" Type="Int32" />
+          <NavigationProperty Name="producto" Relationship="Self.FK__productop__id_pr__74AE54BC" FromRole="productopromocion" ToRole="producto" />
+        </EntityType>
+        <EntityType Name="serviciodomicilio">
+          <Key>
+            <PropertyRef Name="id_servicio" />
+          </Key>
+          <Property Name="id_servicio" Type="Int32" Nullable="false" />
+          <Property Name="id_venta" Type="Int32" Nullable="false" />
+          <Property Name="id_cliente" Type="Int32" Nullable="false" />
+          <Property Name="id_direccionentrega" Type="Int32" Nullable="false" />
+          <Property Name="id_empleado" Type="Int32" Nullable="false" />
+          <Property Name="fechasolicitud" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fechaentrega" Type="DateTime" Precision="3" />
+          <Property Name="activo" Type="Boolean" />
+          <Property Name="comentarios" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="cliente" Relationship="Self.FK__serviciod__id_cl__10566F31" FromRole="serviciodomicilio" ToRole="cliente" />
+          <NavigationProperty Name="direccion" Relationship="Self.FK__serviciod__id_di__114A936A" FromRole="serviciodomicilio" ToRole="direccion" />
+          <NavigationProperty Name="empleado" Relationship="Self.FK__serviciod__id_em__123EB7A3" FromRole="serviciodomicilio" ToRole="empleado" />
+          <NavigationProperty Name="venta" Relationship="Self.FK__serviciod__id_ve__0F624AF8" FromRole="serviciodomicilio" ToRole="venta" />
+        </EntityType>
+        <EntityType Name="telefono">
+          <Key>
+            <PropertyRef Name="id_telefono" />
+          </Key>
+          <Property Name="id_telefono" Type="Int32" Nullable="false" />
+          <Property Name="id_tipotelefono" Type="Int32" Nullable="false" />
+          <Property Name="numerotelefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_cliente" Type="Int32" Nullable="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="cliente" Relationship="Self.FK__telefono__id_cli__797309D9" FromRole="telefono" ToRole="cliente" />
+          <NavigationProperty Name="tipotelefono" Relationship="Self.FK__telefono__id_tip__787EE5A0" FromRole="telefono" ToRole="tipotelefono" />
+        </EntityType>
+        <EntityType Name="tipocliente">
+          <Key>
+            <PropertyRef Name="id_tipocliente" />
+          </Key>
+          <Property Name="id_tipocliente" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="clientes" Relationship="Self.FK__cliente__id_tipo__693CA210" FromRole="tipocliente" ToRole="cliente" />
+        </EntityType>
+        <EntityType Name="tipodocumento">
+          <Key>
+            <PropertyRef Name="id_tipodocumento" />
+          </Key>
+          <Property Name="id_tipodocumento" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="abreviatura" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="clientes" Relationship="Self.FK__cliente__id_tipo__6754599E" FromRole="tipodocumento" ToRole="cliente" />
+          <NavigationProperty Name="empleadoes" Relationship="Self.FK__empleado__id_tip__5AEE82B9" FromRole="tipodocumento" ToRole="empleado" />
+        </EntityType>
+        <EntityType Name="tipotelefono">
+          <Key>
+            <PropertyRef Name="id_tipotelefono" />
+          </Key>
+          <Property Name="id_tipotelefono" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="telefonoes" Relationship="Self.FK__telefono__id_tip__787EE5A0" FromRole="tipotelefono" ToRole="telefono" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="id_empleado" />
+          </Key>
+          <Property Name="id_empleado" Type="Int32" Nullable="false" />
+          <Property Name="usuario1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contrasena" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="activo" Type="Boolean" />
+          <NavigationProperty Name="empleado" Relationship="Self.FK__usuario__id_empl__619B8048" FromRole="usuario" ToRole="empleado" />
+        </EntityType>
+        <EntityType Name="venta">
+          <Key>
+            <PropertyRef Name="id_venta" />
+          </Key>
+          <Property Name="id_venta" Type="Int32" Nullable="false" />
+          <Property Name="id_cliente" Type="Int32" Nullable="false" />
+          <Property Name="id_empleado" Type="Int32" Nullable="false" />
+          <Property Name="id_formapago" Type="Int32" Nullable="false" />
+          <Property Name="id_detalleventa" Type="Int32" Nullable="false" />
+          <Property Name="fechaventa" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="subtotal" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="descuento" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="impuestos" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="total" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="comentarios" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="domicilio" Type="Boolean" />
+          <NavigationProperty Name="cliente" Relationship="Self.FK__venta__id_client__03F0984C" FromRole="venta" ToRole="cliente" />
+          <NavigationProperty Name="detalleventas" Relationship="Self.FK__detalleve__id_ve__09A971A2" FromRole="venta" ToRole="detalleventa" />
+          <NavigationProperty Name="empleado" Relationship="Self.FK__venta__id_emplea__04E4BC85" FromRole="venta" ToRole="empleado" />
+          <NavigationProperty Name="formapago" Relationship="Self.FK__venta__id_formap__05D8E0BE" FromRole="venta" ToRole="formapago" />
+          <NavigationProperty Name="serviciodomicilios" Relationship="Self.FK__serviciod__id_ve__0F624AF8" FromRole="venta" ToRole="serviciodomicilio" />
+        </EntityType>
+        <Association Name="FK__empleado__id_car__5BE2A6F2">
+          <End Role="cargoempleado" Type="Self.cargoempleado" Multiplicity="1" />
+          <End Role="empleado" Type="Self.empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cargoempleado">
+              <PropertyRef Name="id_cargo" />
+            </Principal>
+            <Dependent Role="empleado">
+              <PropertyRef Name="id_cargo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__producto__id_cat__6FE99F9F">
+          <End Role="categoriaproducto" Type="Self.categoriaproducto" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="categoriaproducto">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__direccion__id_ci__7D439ABD">
+          <End Role="ciudad" Type="Self.ciudad" Multiplicity="1" />
+          <End Role="direccion" Type="Self.direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciudad">
+              <PropertyRef Name="id_ciudad" />
+            </Principal>
+            <Dependent Role="direccion">
+              <PropertyRef Name="id_ciudad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cliente__id_empl__68487DD7">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="0..1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cliente__id_tipo__6754599E">
+          <End Role="tipodocumento" Type="Self.tipodocumento" Multiplicity="1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipodocumento">
+              <PropertyRef Name="id_tipodocumento" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="id_tipodocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__cliente__id_tipo__693CA210">
+          <End Role="tipocliente" Type="Self.tipocliente" Multiplicity="1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipocliente">
+              <PropertyRef Name="id_tipocliente" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="id_tipocliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__direccion__id_cl__7E37BEF6">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="direccion" Type="Self.direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="direccion">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__serviciod__id_cl__10566F31">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="serviciodomicilio" Type="Self.serviciodomicilio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="serviciodomicilio">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__telefono__id_cli__797309D9">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="telefono" Type="Self.telefono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="telefono">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__venta__id_client__03F0984C">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id_cliente" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="id_cliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleve__id_de__0B91BA14">
+          <End Role="descuentomayorista" Type="Self.descuentomayorista" Multiplicity="0..1" />
+          <End Role="detalleventa" Type="Self.detalleventa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="descuentomayorista">
+              <PropertyRef Name="id_descuento" />
+            </Principal>
+            <Dependent Role="detalleventa">
+              <PropertyRef Name="id_descuento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleve__id_pr__0A9D95DB">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="detalleventa" Type="Self.detalleventa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="detalleventa">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__detalleve__id_ve__09A971A2">
+          <End Role="venta" Type="Self.venta" Multiplicity="1" />
+          <End Role="detalleventa" Type="Self.detalleventa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="venta">
+              <PropertyRef Name="id_venta" />
+            </Principal>
+            <Dependent Role="detalleventa">
+              <PropertyRef Name="id_venta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__serviciod__id_di__114A936A">
+          <End Role="direccion" Type="Self.direccion" Multiplicity="1" />
+          <End Role="serviciodomicilio" Type="Self.serviciodomicilio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="direccion">
+              <PropertyRef Name="id_direccion" />
+            </Principal>
+            <Dependent Role="serviciodomicilio">
+              <PropertyRef Name="id_direccionentrega" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__empleado__id_tip__5AEE82B9">
+          <End Role="tipodocumento" Type="Self.tipodocumento" Multiplicity="1" />
+          <End Role="empleado" Type="Self.empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipodocumento">
+              <PropertyRef Name="id_tipodocumento" />
+            </Principal>
+            <Dependent Role="empleado">
+              <PropertyRef Name="id_tipodocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__empleado__regist__5CD6CB2B">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="0..1" />
+          <End Role="empleado1" Type="Self.empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="empleado1">
+              <PropertyRef Name="registrado_por" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__producto__id_emp__70DDC3D8">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__serviciod__id_em__123EB7A3">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="serviciodomicilio" Type="Self.serviciodomicilio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="serviciodomicilio">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__usuario__id_empl__619B8048">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="usuario">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__venta__id_emplea__04E4BC85">
+          <End Role="empleado" Type="Self.empleado" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="empleado">
+              <PropertyRef Name="id_empleado" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="id_empleado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__venta__id_formap__05D8E0BE">
+          <End Role="formapago" Type="Self.formapago" Multiplicity="1" />
+          <End Role="venta" Type="Self.venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="formapago">
+              <PropertyRef Name="id_formapago" />
+            </Principal>
+            <Dependent Role="venta">
+              <PropertyRef Name="id_formapago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__productop__id_pr__74AE54BC">
+          <End Role="producto" Type="Self.producto" Multiplicity="1" />
+          <End Role="productopromocion" Type="Self.productopromocion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id_producto" />
+            </Principal>
+            <Dependent Role="productopromocion">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__serviciod__id_ve__0F624AF8">
+          <End Role="venta" Type="Self.venta" Multiplicity="1" />
+          <End Role="serviciodomicilio" Type="Self.serviciodomicilio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="venta">
+              <PropertyRef Name="id_venta" />
+            </Principal>
+            <Dependent Role="serviciodomicilio">
+              <PropertyRef Name="id_venta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__telefono__id_tip__787EE5A0">
+          <End Role="tipotelefono" Type="Self.tipotelefono" Multiplicity="1" />
+          <End Role="telefono" Type="Self.telefono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipotelefono">
+              <PropertyRef Name="id_tipotelefono" />
+            </Principal>
+            <Dependent Role="telefono">
+              <PropertyRef Name="id_tipotelefono" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bd_tienda_belleza_finalEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cargoempleadoes" EntityType="Self.cargoempleado" />
+          <EntitySet Name="categoriaproductoes" EntityType="Self.categoriaproducto" />
+          <EntitySet Name="ciudads" EntityType="Self.ciudad" />
+          <EntitySet Name="clientes" EntityType="Self.cliente" />
+          <EntitySet Name="descuentomayoristas" EntityType="Self.descuentomayorista" />
+          <EntitySet Name="detalleventas" EntityType="Self.detalleventa" />
+          <EntitySet Name="direccions" EntityType="Self.direccion" />
+          <EntitySet Name="empleadoes" EntityType="Self.empleado" />
+          <EntitySet Name="formapagoes" EntityType="Self.formapago" />
+          <EntitySet Name="productoes" EntityType="Self.producto" />
+          <EntitySet Name="productopromocions" EntityType="Self.productopromocion" />
+          <EntitySet Name="serviciodomicilios" EntityType="Self.serviciodomicilio" />
+          <EntitySet Name="telefonoes" EntityType="Self.telefono" />
+          <EntitySet Name="tipoclientes" EntityType="Self.tipocliente" />
+          <EntitySet Name="tipodocumentoes" EntityType="Self.tipodocumento" />
+          <EntitySet Name="tipotelefonoes" EntityType="Self.tipotelefono" />
+          <EntitySet Name="usuarios" EntityType="Self.usuario" />
+          <EntitySet Name="ventas" EntityType="Self.venta" />
+          <AssociationSet Name="FK__empleado__id_car__5BE2A6F2" Association="Self.FK__empleado__id_car__5BE2A6F2">
+            <End Role="cargoempleado" EntitySet="cargoempleadoes" />
+            <End Role="empleado" EntitySet="empleadoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__producto__id_cat__6FE99F9F" Association="Self.FK__producto__id_cat__6FE99F9F">
+            <End Role="categoriaproducto" EntitySet="categoriaproductoes" />
+            <End Role="producto" EntitySet="productoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__direccion__id_ci__7D439ABD" Association="Self.FK__direccion__id_ci__7D439ABD">
+            <End Role="ciudad" EntitySet="ciudads" />
+            <End Role="direccion" EntitySet="direccions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cliente__id_empl__68487DD7" Association="Self.FK__cliente__id_empl__68487DD7">
+            <End Role="empleado" EntitySet="empleadoes" />
+            <End Role="cliente" EntitySet="clientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cliente__id_tipo__6754599E" Association="Self.FK__cliente__id_tipo__6754599E">
+            <End Role="tipodocumento" EntitySet="tipodocumentoes" />
+            <End Role="cliente" EntitySet="clientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__cliente__id_tipo__693CA210" Association="Self.FK__cliente__id_tipo__693CA210">
+            <End Role="tipocliente" EntitySet="tipoclientes" />
+            <End Role="cliente" EntitySet="clientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__direccion__id_cl__7E37BEF6" Association="Self.FK__direccion__id_cl__7E37BEF6">
+            <End Role="cliente" EntitySet="clientes" />
+            <End Role="direccion" EntitySet="direccions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__serviciod__id_cl__10566F31" Association="Self.FK__serviciod__id_cl__10566F31">
+            <End Role="cliente" EntitySet="clientes" />
+            <End Role="serviciodomicilio" EntitySet="serviciodomicilios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__telefono__id_cli__797309D9" Association="Self.FK__telefono__id_cli__797309D9">
+            <End Role="cliente" EntitySet="clientes" />
+            <End Role="telefono" EntitySet="telefonoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__venta__id_client__03F0984C" Association="Self.FK__venta__id_client__03F0984C">
+            <End Role="cliente" EntitySet="clientes" />
+            <End Role="venta" EntitySet="ventas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleve__id_de__0B91BA14" Association="Self.FK__detalleve__id_de__0B91BA14">
+            <End Role="descuentomayorista" EntitySet="descuentomayoristas" />
+            <End Role="detalleventa" EntitySet="detalleventas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleve__id_pr__0A9D95DB" Association="Self.FK__detalleve__id_pr__0A9D95DB">
+            <End Role="producto" EntitySet="productoes" />
+            <End Role="detalleventa" EntitySet="detalleventas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__detalleve__id_ve__09A971A2" Association="Self.FK__detalleve__id_ve__09A971A2">
+            <End Role="venta" EntitySet="ventas" />
+            <End Role="detalleventa" EntitySet="detalleventas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__serviciod__id_di__114A936A" Association="Self.FK__serviciod__id_di__114A936A">
+            <End Role="direccion" EntitySet="direccions" />
+            <End Role="serviciodomicilio" EntitySet="serviciodomicilios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__empleado__id_tip__5AEE82B9" Association="Self.FK__empleado__id_tip__5AEE82B9">
+            <End Role="tipodocumento" EntitySet="tipodocumentoes" />
+            <End Role="empleado" EntitySet="empleadoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__empleado__regist__5CD6CB2B" Association="Self.FK__empleado__regist__5CD6CB2B">
+            <End Role="empleado" EntitySet="empleadoes" />
+            <End Role="empleado1" EntitySet="empleadoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__producto__id_emp__70DDC3D8" Association="Self.FK__producto__id_emp__70DDC3D8">
+            <End Role="empleado" EntitySet="empleadoes" />
+            <End Role="producto" EntitySet="productoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__serviciod__id_em__123EB7A3" Association="Self.FK__serviciod__id_em__123EB7A3">
+            <End Role="empleado" EntitySet="empleadoes" />
+            <End Role="serviciodomicilio" EntitySet="serviciodomicilios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__usuario__id_empl__619B8048" Association="Self.FK__usuario__id_empl__619B8048">
+            <End Role="empleado" EntitySet="empleadoes" />
+            <End Role="usuario" EntitySet="usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__venta__id_emplea__04E4BC85" Association="Self.FK__venta__id_emplea__04E4BC85">
+            <End Role="empleado" EntitySet="empleadoes" />
+            <End Role="venta" EntitySet="ventas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__venta__id_formap__05D8E0BE" Association="Self.FK__venta__id_formap__05D8E0BE">
+            <End Role="formapago" EntitySet="formapagoes" />
+            <End Role="venta" EntitySet="ventas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__productop__id_pr__74AE54BC" Association="Self.FK__productop__id_pr__74AE54BC">
+            <End Role="producto" EntitySet="productoes" />
+            <End Role="productopromocion" EntitySet="productopromocions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__serviciod__id_ve__0F624AF8" Association="Self.FK__serviciod__id_ve__0F624AF8">
+            <End Role="venta" EntitySet="ventas" />
+            <End Role="serviciodomicilio" EntitySet="serviciodomicilios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__telefono__id_tip__787EE5A0" Association="Self.FK__telefono__id_tip__787EE5A0">
+            <End Role="tipotelefono" EntitySet="tipotelefonoes" />
+            <End Role="telefono" EntitySet="telefonoes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bd_tienda_belleza_finalModelStoreContainer" CdmEntityContainer="bd_tienda_belleza_finalEntities">
+          <EntitySetMapping Name="cargoempleadoes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.cargoempleado">
+              <MappingFragment StoreEntitySet="cargoempleado">
+                <ScalarProperty Name="id_cargo" ColumnName="id_cargo" />
+                <ScalarProperty Name="nombrecargo" ColumnName="nombrecargo" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="categoriaproductoes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.categoriaproducto">
+              <MappingFragment StoreEntitySet="categoriaproducto">
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+                <ScalarProperty Name="nombrecategoria" ColumnName="nombrecategoria" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ciudads">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.ciudad">
+              <MappingFragment StoreEntitySet="ciudad">
+                <ScalarProperty Name="id_ciudad" ColumnName="id_ciudad" />
+                <ScalarProperty Name="nombreciudad" ColumnName="nombreciudad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="clientes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.cliente">
+              <MappingFragment StoreEntitySet="cliente">
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="id_tipodocumento" ColumnName="id_tipodocumento" />
+                <ScalarProperty Name="numerodocumento" ColumnName="numerodocumento" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="fecharegistro" ColumnName="fecharegistro" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+                <ScalarProperty Name="id_tipocliente" ColumnName="id_tipocliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="descuentomayoristas">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.descuentomayorista">
+              <MappingFragment StoreEntitySet="descuentomayorista">
+                <ScalarProperty Name="id_descuento" ColumnName="id_descuento" />
+                <ScalarProperty Name="cantidadminima" ColumnName="cantidadminima" />
+                <ScalarProperty Name="porcentajedescuento" ColumnName="porcentajedescuento" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="detalleventas">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.detalleventa">
+              <MappingFragment StoreEntitySet="detalleventa">
+                <ScalarProperty Name="id_detalleventa" ColumnName="id_detalleventa" />
+                <ScalarProperty Name="id_venta" ColumnName="id_venta" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="preciounitario" ColumnName="preciounitario" />
+                <ScalarProperty Name="descuentounitario" ColumnName="descuentounitario" />
+                <ScalarProperty Name="subtotal" ColumnName="subtotal" />
+                <ScalarProperty Name="id_descuento" ColumnName="id_descuento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="direccions">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.direccion">
+              <MappingFragment StoreEntitySet="direccion">
+                <ScalarProperty Name="id_direccion" ColumnName="id_direccion" />
+                <ScalarProperty Name="id_ciudad" ColumnName="id_ciudad" />
+                <ScalarProperty Name="direccion1" ColumnName="direccion" />
+                <ScalarProperty Name="barrio" ColumnName="barrio" />
+                <ScalarProperty Name="referencia" ColumnName="referencia" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="empleadoes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.empleado">
+              <MappingFragment StoreEntitySet="empleado">
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+                <ScalarProperty Name="id_tipodocumento" ColumnName="id_tipodocumento" />
+                <ScalarProperty Name="numerodocumento" ColumnName="numerodocumento" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido" ColumnName="apellido" />
+                <ScalarProperty Name="fechanacimiento" ColumnName="fechanacimiento" />
+                <ScalarProperty Name="fechacontratacion" ColumnName="fechacontratacion" />
+                <ScalarProperty Name="id_cargo" ColumnName="id_cargo" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="salario" ColumnName="salario" />
+                <ScalarProperty Name="registrado_por" ColumnName="registrado_por" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="formapagoes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.formapago">
+              <MappingFragment StoreEntitySet="formapago">
+                <ScalarProperty Name="id_formapago" ColumnName="id_formapago" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="productoes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.producto">
+              <MappingFragment StoreEntitySet="producto">
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="preciobase" ColumnName="preciobase" />
+                <ScalarProperty Name="costo" ColumnName="costo" />
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="stockminimo" ColumnName="stockminimo" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="productopromocions">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.productopromocion">
+              <MappingFragment StoreEntitySet="productopromocion">
+                <ScalarProperty Name="id_productopromocion" ColumnName="id_productopromocion" />
+                <ScalarProperty Name="id_productoprom" ColumnName="id_productoprom" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="cantidadproducto" ColumnName="cantidadproducto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="serviciodomicilios">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.serviciodomicilio">
+              <MappingFragment StoreEntitySet="serviciodomicilio">
+                <ScalarProperty Name="id_servicio" ColumnName="id_servicio" />
+                <ScalarProperty Name="id_venta" ColumnName="id_venta" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="id_direccionentrega" ColumnName="id_direccionentrega" />
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+                <ScalarProperty Name="fechasolicitud" ColumnName="fechasolicitud" />
+                <ScalarProperty Name="fechaentrega" ColumnName="fechaentrega" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="comentarios" ColumnName="comentarios" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="telefonoes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.telefono">
+              <MappingFragment StoreEntitySet="telefono">
+                <ScalarProperty Name="id_telefono" ColumnName="id_telefono" />
+                <ScalarProperty Name="id_tipotelefono" ColumnName="id_tipotelefono" />
+                <ScalarProperty Name="numerotelefono" ColumnName="numerotelefono" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipoclientes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.tipocliente">
+              <MappingFragment StoreEntitySet="tipocliente">
+                <ScalarProperty Name="id_tipocliente" ColumnName="id_tipocliente" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipodocumentoes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.tipodocumento">
+              <MappingFragment StoreEntitySet="tipodocumento">
+                <ScalarProperty Name="id_tipodocumento" ColumnName="id_tipodocumento" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="abreviatura" ColumnName="abreviatura" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipotelefonoes">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.tipotelefono">
+              <MappingFragment StoreEntitySet="tipotelefono">
+                <ScalarProperty Name="id_tipotelefono" ColumnName="id_tipotelefono" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuarios">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.usuario">
+              <MappingFragment StoreEntitySet="usuario">
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+                <ScalarProperty Name="usuario1" ColumnName="usuario" />
+                <ScalarProperty Name="contrasena" ColumnName="contrasena" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ventas">
+            <EntityTypeMapping TypeName="bd_tienda_belleza_finalModel.venta">
+              <MappingFragment StoreEntitySet="venta">
+                <ScalarProperty Name="id_venta" ColumnName="id_venta" />
+                <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+                <ScalarProperty Name="id_formapago" ColumnName="id_formapago" />
+                <ScalarProperty Name="id_detalleventa" ColumnName="id_detalleventa" />
+                <ScalarProperty Name="fechaventa" ColumnName="fechaventa" />
+                <ScalarProperty Name="subtotal" ColumnName="subtotal" />
+                <ScalarProperty Name="descuento" ColumnName="descuento" />
+                <ScalarProperty Name="impuestos" ColumnName="impuestos" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="comentarios" ColumnName="comentarios" />
+                <ScalarProperty Name="domicilio" ColumnName="domicilio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

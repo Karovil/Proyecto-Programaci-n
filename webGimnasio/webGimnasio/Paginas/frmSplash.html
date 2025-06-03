@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La tienda de la peluqueria</title>
+
+    <!-- Enlace para las fuentes de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap" rel="stylesheet">
+
+    <!-- Estilos internos CSS -->
+    <style>
+        /* CSS principal para el diseño de la página */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            font-family: Arial, sans-serif;
+            color: white;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        /* Animación de aparición */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Contenedor de texto */
+        .text-container {
+            width: 50%; /* Ocupa la mitad de la pantalla */
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeIn 1.8s ease-in-out forwards; /* Animación para que aparezca suavemente */
+            color: #F7E7CE;
+        }
+
+            /* Estilo del título principal */
+            .text-container h1 {
+                font-size: 3em;
+                margin-bottom: 10px;
+                font-family: 'Cinzel', serif; /* Fuente decorativa */
+            }
+
+            /* Estilo del subtítulo */
+            .text-container h2 {
+                font-size: 1.5em; /* Tamaño más pequeño */
+                margin-bottom: 20px;
+                font-weight: 900;
+                font-family: 'Ubuntu', serif;
+            }
+
+            /* Estilo para los títulos de sección (Integrantes y Fecha) */
+            .text-container .section-title {
+                font-size: 1.5em;
+                margin-top: 20px;
+                font-weight: 400;
+                font-family: 'Ubuntu';
+            }
+
+            /* Estilo para los párrafos */
+            .text-container p {
+                font-size: 1.2em;
+                line-height: 1.5;
+                margin: 5px 0;
+                font-family: 'Ubuntu';
+            }
+
+        /* Contenedor de imagen */
+        .image-container {
+            position: relative;
+            width: 50%; /* Ocupa la otra mitad de la pantalla */
+            height: 100vh;
+            background-image: url('../imagenes/splashyeahonoyeah.jpg'); /* Imagen de fondo */
+            background-size: cover;
+            background-position: center;
+            mask-image: linear-gradient(to right, black 80%, transparent); /* Efecto de degradado */
+            animation: fadeIn 2s ease-in-out forwards; /* Animación de aparición */
+        }
+
+        /* Superposición de color en la imagen */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Contenedor de imagen con superposición -->
+    <div class="image-container">
+        <div class="overlay"></div>
+    </div>
+
+    <!-- Contenedor de texto con títulos y contenido -->
+    <div class="text-container">
+        <h1>La tienda de la peluqueria</h1> <!-- Título grande -->
+        <h2>Peluqeria</h2> <!-- Título secundario -->
+
+        <p class="section-title">Integrantes:</p> <!-- Título de sección -->
+        <p>Angie Carolina Pareja Villa</p>
+        <p>Samuel Orozco</p>
+
+        <p class="section-title">Fecha:</p> <!-- Otro título de sección -->
+        <p>26 de mayo de 2025</p>
+        <!-- Para el script de control del form -->
+        <script src="Scripts/frmSplash.js"></script>
+    </div>
+</body>
+</html>
