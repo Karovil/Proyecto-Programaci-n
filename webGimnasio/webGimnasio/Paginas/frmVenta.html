@@ -127,20 +127,18 @@
                         </div>
                         <form id="frmDatosVenta">
                             <div class="card-body">
-                             
+
+                                <!-- Información del empleado -->
                                 <div class="empleado-info">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <strong><i class="fas fa-user mr-2 text-green"></i>Empleado:</strong>
-                                            <span id="lblNombreEmpleado" class="text-blue">Cargando...</span>
+                                            <strong>Empleado:</strong> <span id="lblNombreEmpleado"></span>
                                         </div>
                                         <div class="col-md-4">
-                                            <strong><i class="fas fa-id-card mr-2 text-green"></i>Código:</strong>
-                                            <span id="lblCodigoEmpleado" class="text-blue">Cargando...</span>
+                                            <strong>Código:</strong> <span id="lblCodigoEmpleado"></span>
                                         </div>
                                         <div class="col-md-4">
-                                            <strong><i class="fas fa-calendar-alt mr-2 text-green"></i>Fecha:</strong>
-                                            <span id="lblFechaActual" class="text-blue">Cargando...</span>
+                                            <strong>Fecha:</strong> <span id="lblFechaActual"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -212,37 +210,32 @@
                                     </div>
                                 </div>
 
-                                <!-- Sección Detalle de Venta -->
                                 <div class="venta-section">
                                     <h4><i class="fas fa-shopping-cart mr-2"></i>Detalle de Venta</h4>
 
-                                    <!-- Producto 1 -->
-                                    <div class="producto-item">
+                                    <div id="productosContainer">
+                                    </div>
+
+                                    <div class="producto-item d-none" id="productoTemplate">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label><i class="fas fa-box-open mr-1"></i>Producto</label>
-                                                    <select id="cboProducto1" class="form-control select2">
+                                                    <label>Producto</label>
+                                                    <select class="form-control cboProductoDetalle select2" style="width: 100%;">
                                                         <option value="">Seleccione un producto</option>
-                                                        <!-- Opciones se cargarán dinámicamente -->
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label><i class="fas fa-sort-numeric-up mr-1"></i>Cantidad</label>
-                                                    <input type="number" class="form-control" id="txtCantidad1" value="1" min="1">
+                                                    <input type="number" class="form-control txtCantidad" value="1" min="1">
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <label><i class="fas fa-tag mr-1"></i>Precio Unitario</label>
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text">$</span>
-                                                        </div>
-                                                        <input type="text" class="form-control text-right" id="txtPrecioUnitario1" disabled>
-                                                    </div>
+                                                    <label>Precio Unitario</label>
+                                                    <input type="text" class="form-control txtPrecioUnitarioDetalle" value="0.00" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -250,9 +243,9 @@
                                                     <label><i class="fas fa-percentage mr-1"></i>Descuento</label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text">$</span>
+                                                            <span class="input-group-text">%</span>
                                                         </div>
-                                                        <input type="text" class="form-control text-right" id="txtDescuento1" value="0.00">
+                                                        <input type="number" class="form-control text-right txtPorcentajeDescuento" value="0" min="0" max="100">
                                                     </div>
                                                 </div>
                                             </div>
@@ -263,14 +256,18 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">$</span>
                                                         </div>
-                                                        <input type="text" class="form-control text-right" id="txtSubtotal1" disabled>
+                                                        <input type="text" class="form-control text-right txtSubtotalFila" value="0.00" readonly>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-1 d-flex align-items-end mb-3">
+                                                <button type="button" class="btn btn-danger btn-sm btn-eliminar-producto" style="height: 38px;">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Botón para agregar más productos -->
                                     <div class="text-center mt-2">
                                         <button type="button" id="btnAgregarProducto" class="btn btn-outline-primary btn-sm">
                                             <i class="fas fa-plus-circle mr-1"></i> Agregar otro producto
@@ -278,23 +275,23 @@
                                     </div>
                                 </div>
 
-                                <!-- Sección Totales -->
-                                <div class="venta-totales">
+                                <div class="venta-totales mt-3">
                                     <div class="total-item">
                                         <span><i class="fas fa-receipt mr-2"></i><strong>Subtotal:</strong></span>
-                                        <span id="lblSubtotal">$0.00</span>
+                                        <span id="lblSubtotalGeneral">$0.00</span>
                                     </div>
                                     <div class="total-item">
                                         <span><i class="fas fa-tags mr-2"></i><strong>Descuento:</strong></span>
-                                        <span id="lblDescuento">$0.00</span>
+                                        <span id="lblDescuentoGeneral">$0.00</span>
                                     </div>
                                     <div class="total-item">
                                         <span><i class="fas fa-percent mr-2"></i><strong>Impuestos:</strong></span>
-                                        <span id="lblImpuestos">$0.00</span>
+                                        <input type="number" class="form-control d-inline-block text-right" id="txtPorcentajeImpuestos" value="0" min="0" max="100" style="width: 80px; margin-left: 10px;">
+                                        <span id="lblImpuestosMonto">$0.00</span>
                                     </div>
                                     <div class="total-item">
                                         <span><i class="fas fa-money-bill-wave mr-2"></i><strong>Total a Pagar:</strong></span>
-                                        <span id="lblTotal" class="text-success" style="font-size: 1.2em;">$0.00</span>
+                                        <span id="lblTotalPagar" class="text-success" style="font-size: 1.2em;">$0.00</span>
                                     </div>
 
                                     <div class="form-check mt-4">
@@ -339,26 +336,29 @@
         </div>
     </section>
 
-    <!-- Scripts -->
+
+    <!-- Para los script de uso -->
     <script src="../Scripts/jquery-3.7.0.js"></script>
     <script src="../Scripts/moment.min.js"></script>
     <script src="../Scripts/bootstrap.bundle.min.js"></script>
+
     <!-- Select2 -->
     <script src="../Scripts/select2.min.js"></script>
     <script src="Scripts/Comunes/Combos.js"></script>
-    <!-- DataTables -->
+
+    <!-- Tabla -->
     <script src="../Scripts/jquery.dataTables.min.js"></script>
     <script src="../Scripts/dataTables.bootstrap4.min.js"></script>
+    <!--Librerías comunes de JavaScript para las Tablas -->
     <script src="Scripts/Comunes/Tablas.js"></script>
-    <!-- Datepicker -->
-    <script src="../Scripts/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- jsPDF -->
+    <!-- Impresión -->
     <script src="Scripts/Comunes/jspdf.min.js"></script>
-    <!-- Script principal del formulario -->
+    <!-- Para el script de control del form -->
+    <script src="Scripts/frmVenta.js"></script>
+    <script src="Scripts/frmInicio.js"></script>
+    <!--  scripts:-->
     <script src="../Scripts/daterangepicker.js"></script>
     <script src="../Scripts/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="Scripts/frmInicio.js"></script>
-    <script src="Scripts/frmVenta.js"></script>
 
 </body>
 </html>

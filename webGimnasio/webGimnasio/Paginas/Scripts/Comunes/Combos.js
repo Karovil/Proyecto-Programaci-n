@@ -1,4 +1,5 @@
-﻿    async function llenarComboGral(url, combo)
+﻿// En Scripts/Comunes/Combos.js
+async function llenarComboGral(url, combo, textField = "Nombre") // Agregamos textField con un valor predeterminado de "Nombre"
 {
     try {
         const Respuesta = await fetch(url,
@@ -9,16 +10,19 @@
             }
         );
         const Rpta = await Respuesta.json();
-        //Recorrer la respuesta en Rpta, para agregarla al combo de tipo de producto
+
         $(combo).empty();
-        //Se recorre la respuesta
+
+        // Recorremos la respuesta
         for (i = 0; i < Rpta.length; i++) {
-            $(combo).append('<option value=' + Rpta[i].Codigo + '>' + Rpta[i].Nombre + '</option>');
+            // Usamos el parámetro textField para obtener el texto correcto
+            $(combo).append('<option value=' + Rpta[i].Codigo + '>' + Rpta[i][textField] + '</option>');
         }
-        //Tener muy encuenta los nombres de los campos, deben ser iguales
+
         return "Termino";
     }
     catch (error) {
+        console.error("Error al llenar el combo desde " + url + ":", error);
         return error;
     }
 }
