@@ -10,6 +10,12 @@ var productosCargados = [];
 var productoIdCounter = 0;
 
 
+function generarIdVentaSimple() {
+    // Esto es solo para demostración - en producción deberías obtener este valor de tu base de datos
+    const ultimoId = 5; // Reemplaza esto con una consulta a tu BD
+    return ultimoId + 1;
+}
+
 jQuery(function () {
     // ===== [1. VERIFICACIÓN DE SESIÓN Y CARGA DE DATOS DEL EMPLEADO] =====
     const codigoUsuario = sessionStorage.getItem('codUsu');
@@ -54,6 +60,8 @@ jQuery(function () {
         });
     });
 
+    const nuevoId = generarIdVentaSimple;
+    $("#txtIdVenta").val(nuevoId);
 
     // Paso 1: Inicializar el datepicker en el contenedor DIV
     $('#dtmFechaVenta').datetimepicker({
@@ -150,18 +158,25 @@ jQuery(function () {
     // Estos eventos ya estaban bien y deben seguir así
     $("#productosContainer").on("change", ".cboProductoDetalle", function () {
         const itemActual = $(this).closest('.producto-item');
-        const codigoProductoSeleccionado = $(this).val();
+        const idProductoSeleccionado = $(this).val(); // Ahora esto contendrá el ID numérico (ej. "1", "2", "3")
         const precioUnitarioInput = itemActual.find(".txtPrecioUnitarioDetalle");
 
-        if (codigoProductoSeleccionado) {
-            const productoSeleccionado = productosCargados.find(prod => prod.Codigo === codigoProductoSeleccionado);
+        if (idProductoSeleccionado) {
+            // *** CAMBIO CLAVE AQUÍ: Buscar por 'id' y asegurarse de que la comparación sea numérica ***
+            const productoSeleccionado = productosCargados.find(prod => prod.id == idProductoSeleccionado);
+            // Usamos '==' para comparación flexible (string "1" con number 1)
+            // o 'parseInt(idProductoSeleccionado, 10)' si prefieres estricto.
+            // Si ya estás seguro de que `$(this).val()` te devuelve un número, puedes usar '==='.
+
             if (productoSeleccionado) {
                 precioUnitarioInput.val(productoSeleccionado.PrecioB.toFixed(2));
             } else {
                 precioUnitarioInput.val("0.00");
                 mensajeInfo("No se encontró el precio para el producto seleccionado.");
+                console.warn(`Error: Producto con ID ${idProductoSeleccionado} no encontrado en 'productosCargados'. Verifique la coherencia de los datos.`);
             }
         } else {
+            // Si se selecciona la opción vacía (ej. "Seleccione un producto")
             precioUnitarioInput.val("0.00");
         }
         calcularSubtotalItem(itemActual);
@@ -266,7 +281,7 @@ async function cargarProductosYLlenarCombo(callback) {
 function llenarComboEnItem(comboElement) {
     $(comboElement).empty().append('<option value="">Seleccione un producto</option>');
     for (let i = 0; i < productosCargados.length; i++) {
-        $(comboElement).append('<option value="' + productosCargados[i].Codigo + '">' + productosCargados[i].Nombre + '</option>');
+        $(comboElement).append('<option value="' + productosCargados[i].id + '">' + productosCargados[i].Nombre + '</option>');
     }
 }
 
@@ -357,4 +372,441 @@ function actualizarTotalesGenerales() {
     $("#lblDescuentoGeneral").text("$" + descuentoTotalCalculado.toFixed(2));
     $("#lblImpuestosMonto").text("$" + impuestosMonto.toFixed(2));
     $("#lblTotalPagar").text("$" + totalPagar.toFixed(2));
+}
+
+
+function Imprimir() {
+    // Obtener fecha y hora actual para el nombre del archivo
+    const fechaActual = new Date();
+    const nomFile = `Venta_${fechaActual.getDate()}_${fechaActual.getMonth() + 1}_${fechaActual.getFullYear()}_${fechaActual.getHours()}_${fechaActual.getMinutes()}.pdf`;
+
+    // === Obtener los valores del formulario de venta ===
+    const idVenta = $("#txtIdVenta").val();
+    const fechaVenta = $("#dtmFechaVenta").find("input").val();
+    const tipoDoc = $("#cboTipoDoc").find('option:selected').text();
+    const nroDoc = $("#txtNroDoc").val();
+    const nombreCliente = $("#txtNombreCliente").val();
+    const formaPago = $("#cboFormaPago").find('option:selected').text();
+    const subtotal = $("#lblSubtotalGeneral").text();
+    const descuento = $("#lblDescuentoGeneral").text();
+    const impuestos = $("#lblImpuestosMonto").text();
+    const total = $("#lblTotalPagar").text();
+    const domicilio = $("#chkDomicilio").is(":checked") ? "Sí" : "No";
+    const comentarios = $("#txtComentarios").val();
+
+    // Obtener información del empleado
+    const empleado = $("#lblNombreEmpleado").text();
+    const codigoEmpleado = $("#lblCodigoEmpleado").text();
+
+    // Obtener detalles de productos
+    const productos = [];
+    $(".producto-item:not(#productoTemplate)").each(function () {
+        const producto = $(this).find(".cboProductoDetalle").find('option:selected').text();
+        const cantidad = $(this).find(".txtCantidad").val();
+        const precio = $(this).find(".txtPrecioUnitarioDetalle").val();
+        const descuento = $(this).find(".txtPorcentajeDescuento").val();
+        const subtotal = $(this).find(".txtSubtotalFila").val();
+
+        productos.push({
+            producto,
+            cantidad,
+            precio,
+            descuento,
+            subtotal
+        });
+    });
+
+    // === Crear un nuevo documento PDF ===
+    var doc = new jsPDF('p', 'mm', 'letter');
+    var ancho = doc.internal.pageSize.width;
+    var alto = doc.internal.pageSize.height;
+
+    // === Estilos del documento ===
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(33, 37, 41); // Color oscuro
+
+    // === Encabezado del recibo ===
+    doc.setFontSize(18);
+    const tituloPrincipal = "RECIBO DE VENTA";
+    const anchoTituloPrincipal = doc.getTextWidth(tituloPrincipal);
+    doc.text(tituloPrincipal, (ancho - anchoTituloPrincipal) / 2, 20);
+
+    // Logo o información de la empresa
+    doc.setFontSize(12);
+    doc.text("Sistema de Ventas", 20, 30);
+    doc.text("Teléfono: (123) 456-7890", 20, 36);
+    doc.text("Email: ventas@empresa.com", 20, 42);
+
+    // Línea divisoria
+    doc.setLineWidth(0.5);
+    doc.setDrawColor(122, 109, 93);
+    doc.line(20, 48, ancho - 20, 48);
+
+    // === Información de la venta ===
+    let y = 60;
+    doc.setFontSize(12);
+
+    // Función para agregar campos con formato
+    const addField = (label, value, x = 20) => {
+        doc.setFont('helvetica', 'bold');
+        doc.text(label, x, y);
+        doc.setFont('helvetica', 'normal');
+        doc.text(value, x + 40, y);
+        y += 7;
+    };
+
+    addField("N° Venta:", idVenta);
+    addField("Fecha:", fechaVenta);
+    addField("Empleado:", `${empleado} (${codigoEmpleado})`);
+    y += 5; // Espacio adicional
+
+    // Información del cliente
+    doc.setFont('helvetica', 'bold');
+    doc.text("DATOS DEL CLIENTE", 20, y);
+    y += 7;
+
+    addField("Tipo Doc:", tipoDoc);
+    addField("N° Documento:", nroDoc);
+    addField("Nombre:", nombreCliente);
+    y += 5; // Espacio adicional
+
+    // Detalles de pago
+    doc.setFont('helvetica', 'bold');
+    doc.text("DETALLES DE PAGO", 20, y);
+    y += 7;
+
+    addField("Forma de Pago:", formaPago);
+    addField("Servicio a domicilio:", domicilio);
+    y += 10; // Espacio antes de la tabla
+
+    // === Tabla de productos ===
+    doc.setFont('helvetica', 'bold');
+    doc.text("DETALLE DE PRODUCTOS", 20, y);
+    y += 10;
+
+    // Encabezados de la tabla
+    const encabezados = ["Producto", "Cant.", "P. Unit.", "Desc.", "Subtotal"];
+    const anchosColumnas = [80, 20, 30, 20, 30];
+    let x = 20;
+
+    // Dibujar encabezados
+    encabezados.forEach((texto, i) => {
+        doc.text(texto, x, y);
+        x += anchosColumnas[i];
+    });
+    y += 5;
+
+    // Línea bajo encabezados
+    doc.setLineWidth(0.2);
+    doc.line(20, y, ancho - 20, y);
+    y += 5;
+
+    // Contenido de la tabla
+    doc.setFont('helvetica', 'normal');
+    productos.forEach(prod => {
+        x = 20;
+        doc.text(prod.producto.substring(0, 30), x, y); // Limitar longitud del nombre
+        x += anchosColumnas[0];
+        doc.text(prod.cantidad, x, y);
+        x += anchosColumnas[1];
+        doc.text("$" + prod.precio, x, y);
+        x += anchosColumnas[2];
+        doc.text(prod.descuento + "%", x, y);
+        x += anchosColumnas[3];
+        doc.text("$" + prod.subtotal, x, y);
+        y += 7;
+
+        // Si nos acercamos al final de la página, agregar nueva página
+        if (y > alto - 50) {
+            doc.addPage();
+            y = 20;
+        }
+    });
+
+    // Línea bajo la tabla
+    doc.setLineWidth(0.5);
+    doc.line(20, y, ancho - 20, y);
+    y += 10;
+
+    // === Totales ===
+    doc.setFont('helvetica', 'bold');
+    addField("Subtotal:", subtotal, ancho - 100);
+    addField("Descuento:", descuento, ancho - 100);
+    addField("Impuestos:", impuestos, ancho - 100);
+
+    doc.setFontSize(14);
+    doc.setTextColor(40, 167, 69); // Verde para el total
+    addField("TOTAL:", total, ancho - 100);
+    y += 10;
+
+    // Comentarios si existen
+    if (comentarios) {
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text("Comentarios:", 20, y);
+        y += 5;
+        doc.setFont('helvetica', 'normal');
+        doc.text(comentarios, 20, y, { maxWidth: ancho - 40 });
+        y += 15;
+    }
+
+    // === Pie de página ===
+    doc.setFontSize(8);
+    doc.setTextColor(100);
+    doc.text("Documento generado automáticamente", 20, alto - 20);
+    doc.text(`Fecha: ${fechaActual.toLocaleDateString()} Hora: ${fechaActual.toLocaleTimeString()}`, ancho - 70, alto - 20, { align: "right" });
+
+    // === Guardar el archivo PDF ===
+    doc.save(nomFile);
+    alert("Recibo generado: " + nomFile);
+}
+
+// Asignar la función al botón de imprimir
+$("#btnImprimir").click(Imprimir);
+
+
+$("#btnGuardar").on("click", function () {
+    
+        agregarVentaCompleta();
+    
+});
+
+    // ... function validarFormularioVenta() {
+    // ... (otras validaciones)
+
+        // ... et productosValidos = true;
+      // ...   const productosEnPantalla = $("#productosContainer .producto-item:not(.d-none)");
+    // ...     productosEnPantalla.each(function () {
+    // ...         const idProductoStr = $(this).find(".cboProductoDetalle").val();
+       // ...      const idProducto = parseInt(idProductoStr, 10);
+        // ... (otras variables de cantidad, precio)
+
+        // **AQUÍ VA EL LOG PARA VALIDACIÓN**
+        // ...     console.log("Validando producto:", {
+       // ...          id_producto_del_combo_string: idProductoStr,
+    // ... id_producto_parseado_a_int: idProducto
+       // ...      });
+// ...
+       // ...      if (isNaN(idProducto) || idProducto <= 0) {
+        // ...         mensajeInfo("Hay un producto sin seleccionar o con un ID inválido en el detalle.");
+        // ...         productosValidos = false;
+          // ...       return false;
+       // ...      }
+        // ... (resto de validaciones)
+     // ...    });
+
+    // ... (retorno)
+// ... 
+async function agregarVentaCompleta() {
+    try {
+        // Primero grabamos el encabezado de la venta
+        const idVentaGenerado = await grabarEncabezadoVenta();
+
+        if (idVentaGenerado && idVentaGenerado > 0) {
+            // 3. Grabar los detalles usando este ID
+            await grabarDetallesVenta(idVentaGenerado);
+
+            // Mostrar mensaje de éxito
+            mensajeOk(`Venta registrada correctamente con ID: ${idVentaGenerado}`);
+
+            // 5. Opcional: Actualizar interfaz o realizar otras acciones
+            console.log("ID de venta generado:", idVentaGenerado);
+
+            // Puedes usar este ID para:
+            // - Mostrar un comprobante
+            // - Redirigir a una página de detalles
+            // - Actualizar listados
+        } else {
+            throw new Error("No se recibió un ID de venta válido");
+        }
+    } catch (error) {
+        console.error("Error en el proceso completo:", error);
+        mensajeError("No se pudo completar el registro de la venta");
+    }
+}
+
+async function grabarEncabezadoVenta() {
+    const idCliente = $("#txtNombreCliente").data("id");
+    const idEmpleado = sessionStorage.getItem('codUsu');
+    const idFormaPago = $("#cboFormaPago").val();
+    const fechaVenta = $("#dtmFechaVenta").find("input").val(); // Asegura el formato de fecha (YYYY-MM-DD)
+    const subtotal = parseFloat($("#lblSubtotalGeneral").text().replace('$', '')) || 0;
+    const descuento = parseFloat($("#lblDescuentoGeneral").text().replace('$', '')) || 0;
+    const impuestos = parseFloat($("#lblImpuestosMonto").text().replace('$', '')) || 0;
+    const total = parseFloat($("#lblTotalPagar").text().replace('$', '')) || 0;
+    const domicilio = $("#chkDomicilio").is(":checked") ? true : false; // Cambiado a booleano, si tu DB lo acepta como bit/bool. Si es int, 1:0.
+    const comentarios = $("#txtComentarios").val().trim();
+
+    // Objeto de datos que COINCIDE exactamente con tu modelo 'venta' en C#
+    const datosVenta = {
+        id_venta: 0, // Se generará automáticamente en el servidor
+        id_cliente: idCliente,
+        id_empleado: idEmpleado,
+        id_formapago: idFormaPago,
+        // *** IMPORTANTE: id_detalleventa. Tu modelo 'venta' lo tiene.
+        // Si siempre esperas un detalle, este valor de 0 es un marcador de posición.
+        // Se actualizará después con el ID del primer detalle.
+        id_detalleventa: 0, // Según tu modelo C#, esta propiedad existe en 'venta'
+        fechaventa: fechaVenta, // Coincide con 'fechaventa'
+        subtotal: subtotal,
+        descuento: descuento, // Coincide con 'descuento' (nullable)
+        impuestos: impuestos, // Coincide con 'impuestos' (nullable)
+        total: total,       // Coincide con 'total'
+        comentarios: comentarios,
+        domicilio: domicilio // Coincide con 'domicilio' (nullable)
+    };
+
+    const url = dir + "venta?cmdo=1"; // cmdo=1 para agregar venta principal
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(datosVenta)
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.text();
+            throw new Error(`Error HTTP ${response.status} al grabar encabezado de venta: ${errorBody}`);
+        }
+
+        const ventaGuardada = await response.json();
+        const idVentaGenerado = ventaGuardada.id_venta;
+
+        $("#txtIdVenta").val(idVentaGenerado);
+
+        return idVentaGenerado;
+
+    } catch (error) {
+        console.error("Error al grabar el encabezado de la venta:", error);
+        mensajeError(`No se pudo registrar el encabezado de la venta. Detalles: ${error.message}`);
+        throw error;
+    }
+}
+
+async function grabarDetallesVenta(idVenta) {
+    const productosEnPantalla = $("#productosContainer .producto-item:not(.d-none)");
+    if (productosEnPantalla.length === 0) {
+        console.warn("No hay productos visibles para grabar en el detalle de venta.");
+        return;
+    }
+
+    const promises = [];
+
+    for (const productoItem of productosEnPantalla) {
+        const $item = $(productoItem);
+        const idProducto = parseInt($item.find(".cboProductoDetalle").val(), 10); 
+        const cantidad = parseInt($item.find(".txtCantidad").val()) || 0; // 'cantidad' es int en C#
+        const preciounitario = parseFloat($item.find(".txtPrecioUnitarioDetalle").val()) || 0; // Coincide con 'preciounitario'
+        const descuentounitario = parseFloat($item.find(".txtPorcentajeDescuento").val()) || null; // Coincide con 'descuentounitario' (nullable), usa null si no hay descuento
+        const subtotal = parseFloat($item.find(".txtSubtotalFila").val()) || 0; // Coincide con 'subtotal'
+
+
+        // **AQUÍ VA EL LOG CLAVE**
+        console.log("Preparando detalle para el producto:", {
+            id_venta: idVenta,
+            id_producto_del_combo_string: idProductoStr, // El valor TAL CUAL del combo (string)
+            id_producto_parseado_a_int: idProducto,     // El valor después de parseInt (número)
+            cantidad: cantidad,
+            preciounitario: preciounitario,
+            descuentounitario: descuentounitario,
+            subtotal: subtotal
+        });
+        // Objeto de datos que COINCIDE exactamente con tu modelo 'detalleventa' en C#
+        const detalleVenta = {
+            id_detalleventa: 0, // Se generará automáticamente en el servidor
+            id_venta: idVenta,
+            id_producto: idProducto,
+            cantidad: cantidad,
+            preciounitario: preciounitario,
+            descuentounitario: descuentounitario, // Coincide con 'descuentounitario'
+            subtotal: subtotal
+            // id_descuento: null // No estás recopilando esto en el frontend, así que se omite o se envía null
+        };
+
+        const url = dir + "detVent"; // Endpoint para el detalle de venta
+
+        promises.push(
+            fetch(url, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(detalleVenta)
+            }).then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorText => {
+                        throw new Error(`Error HTTP ${response.status} al guardar detalle de producto ${idProducto}: ${errorText}`);
+                    });
+                }
+                return response.json();
+            })
+        );
+    }
+
+    try {
+        const resultadosDetalles = await Promise.all(promises);
+        console.log("Todos los detalles de venta guardados:", resultadosDetalles);
+
+        // Si tu tabla 'venta' aún tiene id_detalleventa y quieres actualizarlo con el primer detalle:
+        if (resultadosDetalles.length > 0) {
+            const primerDetalleId = resultadosDetalles[0].id_detalleventa;
+            await actualizarIdDetalleEnVenta(idVenta, primerDetalleId);
+        }
+
+    } catch (error) {
+        console.error("Error al grabar uno o más detalles de venta:", error);
+        mensajeError(`No se pudieron registrar todos los detalles de la venta. Detalles: ${error.message}`);
+        throw error;
+    }
+}
+
+async function actualizarIdDetalleEnVenta(idVenta, idDetalle) {
+    const url = dir + `venta/${idVenta}`;
+
+    // Solo actualizamos el campo id_detalleventa
+    const datosActualizacion = {
+        id_detalleventa: idDetalle
+    };
+
+    const response = await fetch(url, {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(datosActualizacion)
+    });
+
+    if (!response.ok) {
+        console.warn("No se pudo actualizar el id_detalleventa en el encabezado");
+    }
+}
+
+function limpiarFormularioVenta() {
+    // Limpiar campos de cliente
+    $("#txtNroDoc").val("");
+    $("#txtNombreCliente").val("").data("id", "");
+
+    // Limpiar productos
+    $("#productosContainer").empty();
+    agregarNuevaFilaProducto(); // Agregar una fila vacía
+
+    // Resetear totales
+    $("#lblSubtotalGeneral").text("$0.00");
+    $("#lblDescuentoGeneral").text("$0.00");
+    $("#lblImpuestosMonto").text("$0.00");
+    $("#lblTotalPagar").text("$0.00");
+
+    // Generar nuevo ID de venta
+    const nuevoId = generarIdVentaNumerico();
+    $("#txtIdVenta").val(nuevoId);
+
+    // Resetear otros campos
+    $("#chkDomicilio").prop("checked", false);
+    $("#txtComentarios").val("");
 }

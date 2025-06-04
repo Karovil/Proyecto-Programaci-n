@@ -18,7 +18,7 @@ namespace apiPeluqueria.Clases
                    where tC.activo == true
                    orderby tC.codigo
                    select new
-                   {
+                   {   id = tC.id_producto,
                        Codigo = tC.codigo,
                        Nombre = tC.nombre,
                        Stock = tC.stock,
