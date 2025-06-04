@@ -810,7 +810,15 @@ async function ConsultarVenta() {
         $("#txtNombreCliente").data("id", rpta[0].id_cliente);
         $("#txtComentarios").val(rpta[0].comentarios);
         $("#lblTotalPagar").text("$" + parseFloat(rpta[0].total).toFixed(2));
+        $("#lblNombreEmpleado").text(rpta[0].nombreEmpleado);
+        $("#lblCodigoEmpleado").text(rpta[0].id_empleado);
+        $("#lblFechaActual").text(moment(rpta[0].fechaventa).format('DD/MM/YYYY HH:mm'));
+        $("#dtmFechaVenta").data('datetimepicker').date(moment(rpta[0].fechaventa));
 
+        $("#cboFormaPago").val(rpta[0].id_formapago);
+
+        // Llenar detalle de la venta
+        await llenarDetalleVenta(cod);
         // Aquí podrías cargar el detalle de venta (si tienes)
         // Por ejemplo: cargarDetalleVenta(rpta[0].id_venta);
 
@@ -819,6 +827,52 @@ async function ConsultarVenta() {
         mensajeError("Error al consultar la venta: " + error);
     }
 }
+
+async function llenarDetalleVenta(codVenta) {
+    let url = dir + "detVent?dato=" + codVenta;
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const rpta = await response.json();
+    if (!rpta || rpta.length === 0) {
+        mensajeInfo("No hay detalle de venta para este ID.");
+        return;
+    }
+
+    // Limpiar contenedor
+    $("#productosContainer").empty();
+
+    // Recorrer detalles y agregarlos al contenedor
+    rpta.forEach(item => {
+        const nuevaFilaProducto = $("#productoTemplate").clone();
+        nuevaFilaProducto.attr("id", "producto_item_" + item.Codigo);
+        nuevaFilaProducto.removeClass("d-none");
+        nuevaFilaProducto.show();
+
+        // Setear valores
+        nuevaFilaProducto.find(".cboProductoDetalle").val(item.Producto);
+        nuevaFilaProducto.find(".txtCantidad").val(item.Cantidad);
+        nuevaFilaProducto.find(".txtPrecioUnitarioDetalle").val(item.PrecioU);
+        nuevaFilaProducto.find(".txtPorcentajeDescuento").val(item.Descuento);
+        nuevaFilaProducto.find(".txtSubtotalFila").val(item.SubTotal);
+
+        // Append al contenedor
+        $("#productosContainer").append(nuevaFilaProducto);
+
+        // Inicializar Select2
+        nuevaFilaProducto.find(".cboProductoDetalle").select2({
+            theme: 'bootstrap4',
+            language: { noResults: () => "No hay resultados" }
+        });
+    });
+
+    actualizarTotalesGenerales();
+}
+
 
 
 

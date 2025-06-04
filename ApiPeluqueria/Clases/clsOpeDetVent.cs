@@ -40,6 +40,7 @@ namespace apiPeluqueria.Clases
                        Codigo = tD.id_detalleventa,
                        TipoDoc = tS.id_tipodocumento,
                        NroDoc = tS.numerodocumento,
+                       tD.id_producto,
                        NombreC = tS.nombre + " " + tS.apellido,
                        Empleado = tM.nombre,
                        FormaPago = tL.descripcion,

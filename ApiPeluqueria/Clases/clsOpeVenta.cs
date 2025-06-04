@@ -22,6 +22,10 @@ namespace apiPeluqueria.Clases
                         on tM.id_cliente equals tS.id_cliente
                    join tD in oEFR.detalleventas
                         on tM.id_venta equals tD.id_venta
+                   join tE in oEFR.empleadoes
+                      on tM.id_empleado equals tE.id_empleado
+                   join tP in oEFR.formapagoes
+                     on tM.id_formapago equals tP.id_formapago
                    where tM.id_venta == cod
                         select new
                         {
@@ -31,8 +35,17 @@ namespace apiPeluqueria.Clases
                             tS.id_cliente,
                             Socio = tS.nombre + " " + tS.apellido,
                             tM.id_empleado,
+                            nombreEmpleado = tE.nombre + " " + tE.apellido,
                             tM.comentarios,
                             tM.total,
+                            tM.fechaventa,
+                            tM.domicilio,
+                            tM.impuestos,
+                            tM.descuento,
+                            tM.subtotal,
+                            tM.id_formapago,
+                            tP.descripcion,
+
                             
                         };
 
@@ -67,6 +80,12 @@ namespace apiPeluqueria.Clases
                 tInsc.id_empleado = tblventa.id_empleado;
                 tInsc.id_cliente = tblventa.id_cliente;
                 tInsc.total = tblventa.total;
+                tInsc.id_formapago = tblventa.id_formapago;
+                tInsc.fechaventa = tblventa.fechaventa;
+                tInsc.descuento = tblventa.descuento;
+                tInsc.domicilio = tblventa.domicilio;
+                tInsc.impuestos = tblventa.impuestos;
+                tInsc.impuestos = tblventa.impuestos;
                 oEFR.SaveChanges();
                 return "Se actualizo el registro de: " + tInsc.id_venta;
             }
