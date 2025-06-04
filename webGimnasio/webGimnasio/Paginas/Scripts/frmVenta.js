@@ -10,11 +10,7 @@ var productosCargados = [];
 var productoIdCounter = 0;
 
 
-function generarIdVentaSimple() {
-    // Esto es solo para demostración - en producción deberías obtener este valor de tu base de datos
-    const ultimoId = 5; // Reemplaza esto con una consulta a tu BD
-    return ultimoId + 1;
-}
+
 
 jQuery(function () {
     // ===== [1. VERIFICACIÓN DE SESIÓN Y CARGA DE DATOS DEL EMPLEADO] =====
@@ -60,8 +56,6 @@ jQuery(function () {
         });
     });
 
-    const nuevoId = generarIdVentaSimple;
-    $("#txtIdVenta").val(nuevoId);
 
     // Paso 1: Inicializar el datepicker en el contenedor DIV
     $('#dtmFechaVenta').datetimepicker({
@@ -104,24 +98,24 @@ jQuery(function () {
     $("#txtNroDoc").on("change", function () {
         let doc = $("#txtNroDoc").val();
         let url = dir + "cliente?nrDoc=" + doc;
-        let socio = document.getElementById("txtNombreCliente");
+        let socio = $("#txtNombreCliente");
 
         if (!doc.trim()) {
             mensajeInfo("Ingrese un número de documento para buscar el cliente.");
-            $(socio).val("").data("id", "");
+            socio.val("").data("id", "");
             return;
         }
 
         fetch(url, {
             method: "GET",
             mode: "cors",
-            headers: { "content-type": "application/json", }
+            headers: { "content-type": "application/json" }
         })
             .then(response => {
                 if (!response.ok) {
                     if (response.status === 404) {
                         mensajeInfo("Cliente no encontrado para el documento proporcionado.");
-                        $(socio).val("").data("id", "");
+                        socio.val("").data("id", "");
                         return;
                     }
                     throw new Error(`Error HTTP! estado: ${response.status}`);
@@ -130,18 +124,18 @@ jQuery(function () {
             })
             .then(Rpta => {
                 if (Rpta && Rpta.length > 0) {
-                    socio.dataset.id = Rpta[0].Codigo;
-                    socio.value = Rpta[0].Nombre;
+                    socio.val(Rpta[0].Nombre);
+                    socio.data("id", Rpta[0].Codigo);  // 👈 Usa 'Codigo' que devuelve tu API
                     mensajeOk(`Cliente encontrado: ${Rpta[0].Nombre}`);
                 } else {
                     mensajeInfo("Cliente no encontrado para el documento proporcionado.");
-                    $(socio).val("").data("id", "");
+                    socio.val("").data("id", "");
                 }
             })
             .catch(error => {
                 console.error("Error al buscar cliente:", error);
                 mensajeError("Error al buscar el cliente. Intente nuevamente.");
-                $(socio).val("").data("id", "");
+                socio.val("").data("id", "");
             });
     });
 
@@ -375,13 +369,13 @@ function actualizarTotalesGenerales() {
 }
 
 
-function Imprimir() {
+function Imprimir(idVenta) {
     // Obtener fecha y hora actual para el nombre del archivo
     const fechaActual = new Date();
     const nomFile = `Venta_${fechaActual.getDate()}_${fechaActual.getMonth() + 1}_${fechaActual.getFullYear()}_${fechaActual.getHours()}_${fechaActual.getMinutes()}.pdf`;
 
     // === Obtener los valores del formulario de venta ===
-    const idVenta = $("#txtIdVenta").val();
+    ;
     const fechaVenta = $("#dtmFechaVenta").find("input").val();
     const tipoDoc = $("#cboTipoDoc").find('option:selected').text();
     const nroDoc = $("#txtNroDoc").val();
@@ -455,7 +449,7 @@ function Imprimir() {
         y += 7;
     };
 
-    addField("N° Venta:", idVenta);
+    addField("N° Venta:", idVenta.toString());
     addField("Fecha:", fechaVenta);
     addField("Empleado:", `${empleado} (${codigoEmpleado})`);
     y += 5; // Espacio adicional
@@ -564,249 +558,268 @@ function Imprimir() {
 // Asignar la función al botón de imprimir
 $("#btnImprimir").click(Imprimir);
 
-
 $("#btnGuardar").on("click", function () {
-    
-        agregarVentaCompleta();
-    
+    grabarEncabezadoVenta();
 });
 
-    // ... function validarFormularioVenta() {
-    // ... (otras validaciones)
-
-        // ... et productosValidos = true;
-      // ...   const productosEnPantalla = $("#productosContainer .producto-item:not(.d-none)");
-    // ...     productosEnPantalla.each(function () {
-    // ...         const idProductoStr = $(this).find(".cboProductoDetalle").val();
-       // ...      const idProducto = parseInt(idProductoStr, 10);
-        // ... (otras variables de cantidad, precio)
-
-        // **AQUÍ VA EL LOG PARA VALIDACIÓN**
-        // ...     console.log("Validando producto:", {
-       // ...          id_producto_del_combo_string: idProductoStr,
-    // ... id_producto_parseado_a_int: idProducto
-       // ...      });
-// ...
-       // ...      if (isNaN(idProducto) || idProducto <= 0) {
-        // ...         mensajeInfo("Hay un producto sin seleccionar o con un ID inválido en el detalle.");
-        // ...         productosValidos = false;
-          // ...       return false;
-       // ...      }
-        // ... (resto de validaciones)
-     // ...    });
-
-    // ... (retorno)
-// ... 
-async function agregarVentaCompleta() {
-    try {
-        // Primero grabamos el encabezado de la venta
-        const idVentaGenerado = await grabarEncabezadoVenta();
-
-        if (idVentaGenerado && idVentaGenerado > 0) {
-            // 3. Grabar los detalles usando este ID
-            await grabarDetallesVenta(idVentaGenerado);
-
-            // Mostrar mensaje de éxito
-            mensajeOk(`Venta registrada correctamente con ID: ${idVentaGenerado}`);
-
-            // 5. Opcional: Actualizar interfaz o realizar otras acciones
-            console.log("ID de venta generado:", idVentaGenerado);
-
-            // Puedes usar este ID para:
-            // - Mostrar un comprobante
-            // - Redirigir a una página de detalles
-            // - Actualizar listados
+$("#btnModificar").on("click", function () {
+    alert("Modificar Venta");
+    if (validacionVenta("PUT")) {
+        if (rpta == true) {
+            ModificarVenta();
         } else {
-            throw new Error("No se recibió un ID de venta válido");
+            mensajeInfo("Acción de modificar cancelada.");
         }
-    } catch (error) {
-        console.error("Error en el proceso completo:", error);
-        mensajeError("No se pudo completar el registro de la venta");
     }
-}
+});
+
+$("#btnBuscar").on("click", function () {
+    alert("Buscar Venta");
+    ConsultarVenta();
+});
+
+
 
 async function grabarEncabezadoVenta() {
-    const idCliente = $("#txtNombreCliente").data("id");
-    const idEmpleado = sessionStorage.getItem('codUsu');
-    const idFormaPago = $("#cboFormaPago").val();
-    const fechaVenta = $("#dtmFechaVenta").find("input").val(); // Asegura el formato de fecha (YYYY-MM-DD)
-    const subtotal = parseFloat($("#lblSubtotalGeneral").text().replace('$', '')) || 0;
-    const descuento = parseFloat($("#lblDescuentoGeneral").text().replace('$', '')) || 0;
-    const impuestos = parseFloat($("#lblImpuestosMonto").text().replace('$', '')) || 0;
-    const total = parseFloat($("#lblTotalPagar").text().replace('$', '')) || 0;
-    const domicilio = $("#chkDomicilio").is(":checked") ? true : false; // Cambiado a booleano, si tu DB lo acepta como bit/bool. Si es int, 1:0.
-    const comentarios = $("#txtComentarios").val().trim();
+    
+    let fechaVenta = $("#dtmFechaVenta").find("input").val();
+    let idEmpleado = sessionStorage.getItem('codUsu');
+    let idCliente = $("#txtNombreCliente").data("id");
+    let idFormaPago = $("#cboFormaPago").val();
+    let comentarios = $("#txtComentarios").val();
+    let domicilio = $("#chkDomicilio").is(":checked") ? 1 : 0;
 
-    // Objeto de datos que COINCIDE exactamente con tu modelo 'venta' en C#
-    const datosVenta = {
-        id_venta: 0, // Se generará automáticamente en el servidor
-        id_cliente: idCliente,
-        id_empleado: idEmpleado,
-        id_formapago: idFormaPago,
-        // *** IMPORTANTE: id_detalleventa. Tu modelo 'venta' lo tiene.
-        // Si siempre esperas un detalle, este valor de 0 es un marcador de posición.
-        // Se actualizará después con el ID del primer detalle.
-        id_detalleventa: 0, // Según tu modelo C#, esta propiedad existe en 'venta'
-        fechaventa: fechaVenta, // Coincide con 'fechaventa'
-        subtotal: subtotal,
-        descuento: descuento, // Coincide con 'descuento' (nullable)
-        impuestos: impuestos, // Coincide con 'impuestos' (nullable)
-        total: total,       // Coincide con 'total'
-        comentarios: comentarios,
-        domicilio: domicilio // Coincide con 'domicilio' (nullable)
-    };
+    let subtotal = parseFloat($("#lblSubtotalGeneral").text().replace('$', '')) || 0;
+    let descuento = parseFloat($("#lblDescuentoGeneral").text().replace('$', '')) || 0;
+    let impuestos = parseFloat($("#lblImpuestosMonto").text().replace('$', '')) || 0;
+    let total = parseFloat($("#lblTotalPagar").text().replace('$', '')) || 0;
+    console.log("ID del cliente recuperado:", idCliente);
 
-    const url = dir + "venta?cmdo=1"; // cmdo=1 para agregar venta principal
-
-    try {
-        const response = await fetch(url, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(datosVenta)
-        });
-
-        if (!response.ok) {
-            const errorBody = await response.text();
-            throw new Error(`Error HTTP ${response.status} al grabar encabezado de venta: ${errorBody}`);
-        }
-
-        const ventaGuardada = await response.json();
-        const idVentaGenerado = ventaGuardada.id_venta;
-
-        $("#txtIdVenta").val(idVentaGenerado);
-
-        return idVentaGenerado;
-
-    } catch (error) {
-        console.error("Error al grabar el encabezado de la venta:", error);
-        mensajeError(`No se pudo registrar el encabezado de la venta. Detalles: ${error.message}`);
-        throw error;
+    // Validaciones
+    if (!idCliente) {
+        mensajeError("Debe seleccionar un cliente válido antes de guardar la venta.");
+        return;
     }
-}
-
-async function grabarDetallesVenta(idVenta) {
-    const productosEnPantalla = $("#productosContainer .producto-item:not(.d-none)");
-    if (productosEnPantalla.length === 0) {
-        console.warn("No hay productos visibles para grabar en el detalle de venta.");
+    if (!idFormaPago) {
+        mensajeError("Debe seleccionar una forma de pago.");
         return;
     }
 
-    const promises = [];
-
-    for (const productoItem of productosEnPantalla) {
-        const $item = $(productoItem);
-        const idProducto = parseInt($item.find(".cboProductoDetalle").val(), 10); 
-        const cantidad = parseInt($item.find(".txtCantidad").val()) || 0; // 'cantidad' es int en C#
-        const preciounitario = parseFloat($item.find(".txtPrecioUnitarioDetalle").val()) || 0; // Coincide con 'preciounitario'
-        const descuentounitario = parseFloat($item.find(".txtPorcentajeDescuento").val()) || null; // Coincide con 'descuentounitario' (nullable), usa null si no hay descuento
-        const subtotal = parseFloat($item.find(".txtSubtotalFila").val()) || 0; // Coincide con 'subtotal'
-
-
-        // **AQUÍ VA EL LOG CLAVE**
-        console.log("Preparando detalle para el producto:", {
-            id_venta: idVenta,
-            id_producto_del_combo_string: idProductoStr, // El valor TAL CUAL del combo (string)
-            id_producto_parseado_a_int: idProducto,     // El valor después de parseInt (número)
-            cantidad: cantidad,
-            preciounitario: preciounitario,
-            descuentounitario: descuentounitario,
-            subtotal: subtotal
-        });
-        // Objeto de datos que COINCIDE exactamente con tu modelo 'detalleventa' en C#
-        const detalleVenta = {
-            id_detalleventa: 0, // Se generará automáticamente en el servidor
-            id_venta: idVenta,
-            id_producto: idProducto,
-            cantidad: cantidad,
-            preciounitario: preciounitario,
-            descuentounitario: descuentounitario, // Coincide con 'descuentounitario'
-            subtotal: subtotal
-            // id_descuento: null // No estás recopilando esto en el frontend, así que se omite o se envía null
-        };
-
-        const url = dir + "detVent"; // Endpoint para el detalle de venta
-
-        promises.push(
-            fetch(url, {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(detalleVenta)
-            }).then(response => {
-                if (!response.ok) {
-                    return response.text().then(errorText => {
-                        throw new Error(`Error HTTP ${response.status} al guardar detalle de producto ${idProducto}: ${errorText}`);
-                    });
-                }
-                return response.json();
-            })
-        );
-    }
-
-    try {
-        const resultadosDetalles = await Promise.all(promises);
-        console.log("Todos los detalles de venta guardados:", resultadosDetalles);
-
-        // Si tu tabla 'venta' aún tiene id_detalleventa y quieres actualizarlo con el primer detalle:
-        if (resultadosDetalles.length > 0) {
-            const primerDetalleId = resultadosDetalles[0].id_detalleventa;
-            await actualizarIdDetalleEnVenta(idVenta, primerDetalleId);
-        }
-
-    } catch (error) {
-        console.error("Error al grabar uno o más detalles de venta:", error);
-        mensajeError(`No se pudieron registrar todos los detalles de la venta. Detalles: ${error.message}`);
-        throw error;
-    }
-}
-
-async function actualizarIdDetalleEnVenta(idVenta, idDetalle) {
-    const url = dir + `venta/${idVenta}`;
-
-    // Solo actualizamos el campo id_detalleventa
-    const datosActualizacion = {
-        id_detalleventa: idDetalle
+    let datosVenta = {
+        id_venta: 0,
+        id_cliente: parseInt(idCliente),
+        id_empleado: parseInt(idEmpleado),
+        id_formapago: parseInt(idFormaPago),
+        fechaventa: moment(fechaVenta, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+        subtotal: subtotal,
+        descuento: descuento,
+        impuestos: impuestos,
+        total: total,
+        comentarios: comentarios,
+        domicilio: domicilio,
+        id_detalleventa: 0
     };
 
-    const response = await fetch(url, {
-        method: "PUT",
-        mode: "cors",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(datosActualizacion)
-    });
-
-    if (!response.ok) {
-        console.warn("No se pudo actualizar el id_detalleventa en el encabezado");
+    try {
+        let url = dir + "venta?cmdo=1";
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datosVenta)
+        });
+        const rpta = await response.json();
+        if (response.ok) {
+            $("#txtIdVenta").val(rpta.id_venta);
+            grabarDetalleVenta(rpta.id_venta);
+        } else {
+            mensajeError("Error al grabar la venta: " + rpta);
+        }
+    } catch (error) {
+        mensajeError("Error al grabar la venta: " + error);
     }
 }
 
-function limpiarFormularioVenta() {
-    // Limpiar campos de cliente
-    $("#txtNroDoc").val("");
-    $("#txtNombreCliente").val("").data("id", "");
 
-    // Limpiar productos
-    $("#productosContainer").empty();
-    agregarNuevaFilaProducto(); // Agregar una fila vacía
+async function grabarDetalleVenta(idVenta) {
+    let filas = $(".producto-item:visible");
+    if (filas.length === 0) {
+        mensajeInfo("No hay detalles para guardar.");
+        return;
+    }
 
-    // Resetear totales
-    $("#lblSubtotalGeneral").text("$0.00");
-    $("#lblDescuentoGeneral").text("$0.00");
-    $("#lblImpuestosMonto").text("$0.00");
-    $("#lblTotalPagar").text("$0.00");
+    let errores = 0;
+    for (const fila of filas) {
+        let idProducto = $(fila).find(".cboProductoDetalle").val();
+        let cantidad = parseInt($(fila).find(".txtCantidad").val()) || 0;
+        let precioUnitario = parseFloat($(fila).find(".txtPrecioUnitarioDetalle").val()) || 0;
+        let descuentoUnitario = parseFloat($(fila).find(".txtPorcentajeDescuento").val()) || 0;
+        let subtotalFila = parseFloat($(fila).find(".txtSubtotalFila").val()) || 0;
 
-    // Generar nuevo ID de venta
-    const nuevoId = generarIdVentaNumerico();
-    $("#txtIdVenta").val(nuevoId);
+        let datosDetalle = {
+            id_detalleventa: 0,
+            id_venta: parseInt(idVenta),
+            id_producto: parseInt(idProducto),
+            cantidad: cantidad,
+            preciounitario: precioUnitario,
+            descuentounitario: descuentoUnitario,
+            subtotal: subtotalFila,
+            id_descuento: null
+        };
 
-    // Resetear otros campos
-    $("#chkDomicilio").prop("checked", false);
-    $("#txtComentarios").val("");
+        try {
+            let url = dir + "detVent";
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datosDetalle)
+            });
+            const rpta = await response.json();
+            if (!response.ok) {
+                errores++;
+                mensajeError("Error al grabar el detalle: " + rpta);
+            }
+        } catch (error) {
+            errores++;
+            mensajeError("Error al grabar el detalle: " + error);
+        }
+    }
+
+    if (errores === 0) {
+        mensajeOk("Venta y detalles grabados correctamente.");
+        Imprimir(idVenta);  // 👈 Aquí llamas a la impresión con el ID real de la base de datos.
+        LimpiarVenta();
+        LimpiarVenta();
+    } else {
+        mensajeInfo("Algunos detalles no se grabaron. Verifique la consola.");
+    }
 }
+
+function LimpiarVenta() {
+    $("#txtIdVenta").prop('disabled', false);
+
+    $("#txtNombreCliente").val("").data("id", "");
+    $("#txtNroDoc").val("");
+    $("#cboFormaPago").val("");
+    $("#txtComentarios").val("");
+    $("#chkDomicilio").prop("checked", false);
+    $("#productosContainer").empty();
+    agregarNuevaFilaProducto();
+    actualizarTotalesGenerales();
+}
+function validacionVenta(accion) {
+    let nroDoc = $("#txtNroDoc").val();
+    let nombreCliente = $("#txtNombreCliente").val();
+
+    if (!nombreCliente || nombreCliente.trim().length < 3) {
+        mensajeError("Nombre de cliente inválido o vacío.");
+        $("#txtNombreCliente").focus();
+        return false;
+    }
+    if (!nroDoc || nroDoc.trim().length < 4) {
+        mensajeError("Número de documento inválido.");
+        $("#txtNroDoc").focus();
+        return false;
+    }
+
+    rpta = window.confirm("¿Está seguro de " + (accion === "PUT" ? "modificar" : "procesar") + " la venta?");
+    return true;
+}
+
+async function ModificarVenta() {
+    let idVenta = $("#txtIdVenta").val();
+    let comentarios = $("#txtComentarios").val();
+    let idEmpleado = sessionStorage.getItem('codUsu');
+    let idCliente = $("#txtNombreCliente").data("id");
+    let total = parseFloat($("#lblTotalPagar").text().replace('$', '')) || 0;
+
+    if (idVenta == undefined || idVenta.trim() === "" || parseInt(idVenta, 10) <= 0) {
+        mensajeError("No ha definido la acción de modificar. Cancele o limpie antes.");
+        $("#txtIdVenta").focus();
+        return;
+    }
+    if (!idCliente || idCliente <= 0) {
+        mensajeError("Debe seleccionar un cliente válido.");
+        $("#txtNombreCliente").focus();
+        return;
+    }
+
+    let datosOut = {
+        id_venta: idVenta,
+        comentarios: comentarios,
+        id_empleado: idEmpleado,
+        id_cliente: idCliente,
+        total: total
+    };
+
+    try {
+        let url = dir + "venta";
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(datosOut)
+        });
+
+        const rpta = await response.json();
+        mensajeOk(rpta);
+    } catch (error) {
+        mensajeError("Error: " + error);
+    }
+}
+
+async function ConsultarVenta() {
+    try {
+        LimpiarVenta(); // (Ojo: si tienes una función LimpiarVenta() para limpiar campos)
+        mensajeInfo("");
+
+        let cod = $("#txtIdVenta").val();
+        if (!cod || cod.trim() === "") {
+            mensajeInfo("Ingrese el ID de la venta.");
+            $("#txtIdVenta").focus();
+            return;
+        }
+
+        if (isNaN(cod) || parseInt(cod, 10) <= 0) {
+            mensajeError("ID de venta inválido. Debe ser un número mayor a cero.");
+            $("#txtIdVenta").focus();
+            return;
+        }
+
+        let url = dir + "venta?codVent=" + cod;
+        const response = await fetch(url, {
+            method: "GET",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const rpta = await response.json();
+        if (!rpta || rpta.length === 0) {
+            mensajeInfo("No se encontró ninguna venta con ese ID.");
+            $("#txtIdVenta").prop('disabled', false);
+            return;
+        }
+
+        // Llenar los campos de la venta
+        $("#txtIdVenta").val(rpta[0].id_venta);
+        $("#cboTipoDoc").val(rpta[0].id_tipodocumento);
+        $("#txtNroDoc").val(rpta[0].numerodocumento);
+        $("#txtNombreCliente").val(rpta[0].Socio);
+        $("#txtNombreCliente").data("id", rpta[0].id_cliente);
+        $("#txtComentarios").val(rpta[0].comentarios);
+        $("#lblTotalPagar").text("$" + parseFloat(rpta[0].total).toFixed(2));
+
+        // Aquí podrías cargar el detalle de venta (si tienes)
+        // Por ejemplo: cargarDetalleVenta(rpta[0].id_venta);
+
+        mensajeOk("Datos de la venta cargados correctamente.");
+    } catch (error) {
+        mensajeError("Error al consultar la venta: " + error);
+    }
+}
+
+
+
+

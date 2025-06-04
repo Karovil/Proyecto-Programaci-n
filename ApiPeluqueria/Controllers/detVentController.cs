@@ -39,4 +39,7 @@ namespace apiPeluqueria.Controllers
             return opeDetInsc.Eliminar(idDetI);
         }
     }
+
+
+
 }

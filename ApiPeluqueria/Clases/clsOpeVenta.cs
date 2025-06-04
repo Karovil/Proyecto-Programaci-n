@@ -41,8 +41,8 @@ namespace apiPeluqueria.Clases
 
         public venta agregarVenta()
         {
-            int nro = 0;
-            nro = oEFR.ventas.DefaultIfEmpty().Max(x => x == null ? 1 : x.id_venta + 1);
+            
+            int nro = (oEFR.ventas.Any() ? oEFR.ventas.Max(x => x.id_venta) + 1 : 1);
             if (nro > 0)
             {
                 tblventa.id_venta = nro;
